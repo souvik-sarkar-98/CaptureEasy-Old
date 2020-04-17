@@ -51,6 +51,7 @@ public class Library extends SharedRepository
 	 */
 	public static void setLog4jProperty()
 	{
+		//
 		Properties properties = new Properties();		
 		properties.setProperty("log4j.rootLogger", "INFO, FileAppender");
 		properties.setProperty("log4j.appender.FileAppender", "org.apache.log4j.FileAppender");
