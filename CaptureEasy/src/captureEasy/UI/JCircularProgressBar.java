@@ -13,8 +13,8 @@ import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
-import captureEasy.Library.Library;
-import captureEasy.UI.ActionGUIParts.SavePanel;
+import captureEasy.Resources.Library;
+import captureEasy.UI.Components.SavePanel;
 
 public class JCircularProgressBar extends BasicProgressBarUI implements Runnable{
 	

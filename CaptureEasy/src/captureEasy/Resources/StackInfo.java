@@ -1,4 +1,4 @@
-package captureEasy.Library;
+package captureEasy.Resources;
 
 import java.io.File;
 import java.util.ArrayList;

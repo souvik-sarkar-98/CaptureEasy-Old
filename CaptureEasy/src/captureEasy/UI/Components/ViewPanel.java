@@ -1,4 +1,4 @@
-package captureEasy.UI.ActionGUIParts;
+package captureEasy.UI.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.MatteBorder;
 
-import captureEasy.Library.Library;
+import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 
 public class ViewPanel extends Library implements MouseListener,MouseMotionListener{
@@ -55,7 +55,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 						}
 					});
 					try {
-						ImageLabel.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\1.png")).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
+						ImageLabel.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\1.png")).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 
 					}
@@ -79,7 +79,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					label_Prev.setBounds(160, 5, 33, 25);
 					panel_Button.add(label_Prev);
 					try {
-						label_Prev.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\left-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						label_Prev.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\left-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 
 					}
@@ -92,7 +92,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					Label_FullView.setBounds(195, 5, 33, 25);
 					panel_Button.add(Label_FullView);
 					try {
-						Label_FullView.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\home.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						Label_FullView.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\home.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 
 					}
@@ -105,7 +105,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					label_Next.setBounds(230, 5, 33, 25);
 					panel_Button.add(label_Next);
 					try {
-						label_Next.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\right-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						label_Next.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\right-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 
 					}
@@ -117,7 +117,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					label_Delete.setToolTipText("Delete this image");
 					label_Delete.setBounds(376, 0, 25, 30);
 					try {
-						label_Delete.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\delete.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						label_Delete.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\delete.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 					}
 					panel_Button.add(label_Delete);
@@ -133,7 +133,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 
 					label_VisitFolder.setToolTipText("Visit screenshot folder");
 					try {
-						label_VisitFolder.setIcon(new ImageIcon(ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\folder.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						label_VisitFolder.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\folder.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 					}
 					label_VisitFolder.setBounds(12, 5, 25, 25);

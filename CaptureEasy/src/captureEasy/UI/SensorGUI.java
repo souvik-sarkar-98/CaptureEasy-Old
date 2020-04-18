@@ -4,9 +4,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
-import captureEasy.Library.Library;
-import captureEasy.Library.SharedRepository;
-import captureEasy.UI.ActionGUIParts.SettingsPanel;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+
+import captureEasy.Resources.Library;
+import captureEasy.Resources.SharedRepository;
+import captureEasy.UI.Components.SettingsPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +24,6 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import java.awt.FlowLayout;
@@ -30,7 +32,6 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.Font;
 
 public class SensorGUI extends Library{
@@ -40,17 +41,16 @@ public class SensorGUI extends Library{
 	 */
 	public static int xx,xy,x,y;
 	JPopupMenu popupMenu;
-	public static Window frame;
-	//public static JFrame frame;
-	File saveicon=new File("C:/Users/USER/Desktop/Icons/save.png");
-	File viewicon=new File("C:/Users/USER/Desktop/Icons/view.png");
-	File documenticon=new File("C:/Users/USER/Desktop/Icons/document.png");
-	File settingicon=new File("C:/Users/USER/Desktop/Icons/settings.png");
-	File powericon=new File("C:/Users/USER/Desktop/Icons/power.png");
-	File playicon=new File("C:/Users/USER/Desktop/Icons/play.png");
-	File pauseicon=new File("C:/Users/USER/Desktop/Icons/pause.png");
-	File deleteicon=new File("C:/Users/USER/Desktop/Icons/delete.png");
-	File menuicon = new File("C:\\Users\\USER\\Desktop\\Icons\\menu.png");
+	public static JFrame frame;
+	File saveicon=new File("Icons/save.png");
+	File viewicon=new File("Icons/view.png");
+	File documenticon=new File("Icons/document.png");
+	File settingicon=new File("Icons/settings.png");
+	File powericon=new File("Icons/power.png");
+	File playicon=new File("Icons/play.png");
+	File pauseicon=new File("Icons/pause.png");
+	File deleteicon=new File("Icons/delete.png");
+	File menuicon = new File("Icons/menu.png");
 	public JLabel label_delete;
 	public JLabel lebel_Power;
 	public JLabel Label_Pause ;
@@ -74,26 +74,14 @@ public class SensorGUI extends Library{
 	public SensorGUI()
 	{
 		try{frame.dispose();}catch(Exception e){}
-		if("false".equalsIgnoreCase(getProperty(PropertyFilePath,"PrtSCSS")))
-		{
-			frame=new JDialog();
-			((JDialog) frame).getContentPane().setBackground(Color.WHITE);
-			((JDialog) frame).setResizable(false);
-			((JDialog) frame).getContentPane().setLayout(null);
-			((JDialog) frame).setUndecorated(true);
-			((JDialog) frame).getContentPane().add(Main_panel);
-		}
-		else
-		{
-			frame=new JFrame();
-			((JFrame) frame).getContentPane().setBackground(Color.WHITE);
-			((JFrame) frame).setResizable(false);
-			((JFrame) frame).getContentPane().setLayout(null);
-			((JFrame) frame).setUndecorated(true);
-			((JFrame) frame).getContentPane().add(Main_panel);
-		}
 
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/USER/Desktop/Icons/desktopIcon.png"));
+		frame=new JFrame();
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setResizable(false);
+		frame.getContentPane().setLayout(null);
+		frame.setUndecorated(true);
+		frame.getContentPane().add(Main_panel);
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("Icons/desktopIcon.png"));
 		frame.setSize(new Dimension(54, 110));
 		frame.setAlwaysOnTop(true);
 
@@ -155,7 +143,7 @@ public class SensorGUI extends Library{
 						Label_Pause.setIcon(new ImageIcon(ImageIO.read(playicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 						Label_Pause.setToolTipText("Click Here to Resume");
 						SharedRepository.loopControl=false;
-					}catch (IOException e3) {Label_Pause.setText("Play");logError("Exception in Icon loading: Image "+playicon.getPath()+" Not Available");}
+					}catch (IOException e3) {Label_Pause.setText("Play");logError(e3,"Exception in Icon loading: Image "+playicon.getPath()+" Not Available");}
 				}
 				else
 				{
@@ -165,7 +153,7 @@ public class SensorGUI extends Library{
 						Label_Pause.setToolTipText("Click Here to Pause");
 						SharedRepository.loopControl=true;
 						resetClipboard(getProperty(ClipBoardDataFilePath,"ClipTextData"));
-					}catch (IOException e3) {Label_Pause.setText("Pause"); logError("Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");}
+					}catch (IOException e3) {Label_Pause.setText("Pause"); logError(e3,"Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");}
 				}
 			}
 		});
@@ -179,7 +167,7 @@ public class SensorGUI extends Library{
 		try {
 			Label_Pause.setIcon(new ImageIcon(ImageIO.read(pauseicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 		} catch (IOException e1) {
-			Label_Pause.setText("Pause");logError("Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");
+			Label_Pause.setText("Pause");logError(e1,"Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");
 
 		}
 
@@ -199,9 +187,15 @@ public class SensorGUI extends Library{
 						frame.dispose();
 						try{ActionGUI.dialog.dispose();}catch(Exception e5){}
 						SharedRepository.stopThread=true;
+						try {
+							GlobalScreen.unregisterNativeHook();
+						} catch (NativeHookException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
 					}
 				}
-				//popupMenu.show(frame ,e.getX(), e.getY());
 			}
 		});
 		lebel_Power.setBackground(Color.WHITE);
@@ -210,7 +204,7 @@ public class SensorGUI extends Library{
 		try{
 			lebel_Power.setIcon(new ImageIcon(ImageIO.read(powericon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 		} catch (IOException e) {
-			lebel_Power.setText("Close");logError("Exception in Icon loading: Image "+powericon.getPath()+" Not Available");
+			lebel_Power.setText("Close");logError(e,"Exception in Icon loading: Image "+powericon.getPath()+" Not Available");
 		}
 
 
@@ -240,7 +234,7 @@ public class SensorGUI extends Library{
 		try {
 			label_Document.setIcon(new ImageIcon(ImageIO.read(documenticon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));	
 		} catch (IOException e1) {
-			label_Document.setText("Documents");logError("Exception in Icon loading: Image "+documenticon.getPath()+" Not Available");
+			label_Document.setText("Documents");logError(e1,"Exception in Icon loading: Image "+documenticon.getPath()+" Not Available");
 		}
 
 		label_View = new JLabel("");
@@ -270,7 +264,7 @@ public class SensorGUI extends Library{
 			label_View.setIcon(new ImageIcon(ImageIO.read(viewicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 
 		} catch (IOException e1) {
-			label_View.setText("View");logError("Exception in Icon loading: Image "+viewicon.getPath()+" Not Available");
+			label_View.setText("View");logError(e1,"Exception in Icon loading: Image "+viewicon.getPath()+" Not Available");
 		}
 
 
@@ -302,7 +296,7 @@ public class SensorGUI extends Library{
 			label_Save.setIcon(new ImageIcon(ImageIO.read(saveicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 
 		} catch (IOException e1) {
-			label_Save.setText("Save");logError("Exception in Icon loading: Image "+saveicon.getPath()+" Not Available");
+			label_Save.setText("Save");logError(e1,"Exception in Icon loading: Image "+saveicon.getPath()+" Not Available");
 		}
 
 
@@ -319,7 +313,7 @@ public class SensorGUI extends Library{
 					if(dec==0)
 					{
 						Library.c=0;
-						updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/")+new Random().nextInt(1000000000));
+						updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 					}
 				}
 			}
@@ -329,7 +323,7 @@ public class SensorGUI extends Library{
 		try{
 			label_delete.setIcon(new ImageIcon(ImageIO.read(deleteicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 		} catch (IOException e) {
-			label_delete.setText("Delete");logError("Exception in Icon loading: Image "+deleteicon.getPath()+" Not Available");
+			label_delete.setText("Delete");logError(e,"Exception in Icon loading: Image "+deleteicon.getPath()+" Not Available");
 		}
 
 
@@ -352,7 +346,7 @@ public class SensorGUI extends Library{
 				//label_Count.setText(""+(++c)+"");
 				if(ActionGUI.leaveControl)
 				{
-					Library.captureScreen();
+					captureScreen();
 				}
 
 			}
@@ -371,7 +365,7 @@ public class SensorGUI extends Library{
 		sensor_panel.add(label_Count);
 		label_Count.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		label_Menu = new JLabel("");
+		label_Menu = new JLabel();
 		label_Menu.setBackground(Color.WHITE);
 		label_Menu.setBounds(2, 55, 50, 50);
 		Main_panel.add(label_Menu);
@@ -393,7 +387,7 @@ public class SensorGUI extends Library{
 						Main_panel.setSize(new Dimension(54, 500));
 						button_panel.setVisible(true);
 						label_Menu.setToolTipText("Click here to collapse");
-
+						
 					}
 					popupMenu = new JPopupMenu();
 					popupMenu.setPopupSize(new Dimension(150, 60));
@@ -405,11 +399,12 @@ public class SensorGUI extends Library{
 		});
 		label_Menu.setToolTipText("Click here to expand");
 		button_panel.setVisible(false);
+		//////
 		try{
 			label_Menu.setIcon(new ImageIcon(ImageIO.read(menuicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 
 		} catch (IOException e) {
-			label_Menu.setText("Menu");logError("Exception in Icon loading: Image "+menuicon.getPath()+" Not Available");
+			label_Menu.setText("Menu");logError(e,"Exception in Icon loading: Image "+menuicon.getPath()+" Not Available");
 		}
 
 		/*frame.setSize(new Dimension(54, 500));
@@ -444,7 +439,7 @@ public class SensorGUI extends Library{
 		try{
 			label_Settings.setIcon(new ImageIcon(ImageIO.read(settingicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 		} catch (IOException e) {
-			label_Settings.setText("Settings");logError("Exception in Icon loading: Image "+settingicon.getPath()+" Not Available");
+			label_Settings.setText("Settings");logError(e,"Exception in Icon loading: Image "+settingicon.getPath()+" Not Available");
 		}
 
 	}

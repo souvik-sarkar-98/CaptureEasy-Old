@@ -1,4 +1,4 @@
-package captureEasy.UI.ActionGUIParts;
+package captureEasy.UI.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +34,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import captureEasy.Library.Library;
+import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
@@ -170,7 +170,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 				SettingsPane_DocFolderPanel_Chooser.setMargin(new Insets(2, 2, 2, 2));
 				BufferedImage master1;
 				try {
-					master1 = ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\Significon-Attachment-512.png"));
+					master1 = ImageIO.read(new File("Icons\\Significon-Attachment-512.png"));
 					Image scaled1 = master1.getScaledInstance(Size1.width, Size1.height, java.awt.Image.SCALE_SMOOTH);
 					SettingsPane_DocFolderPanel_Chooser.setIcon(new ImageIcon(scaled1));
 				} catch (IOException e1) {

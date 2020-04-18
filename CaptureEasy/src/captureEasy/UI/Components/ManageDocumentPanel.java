@@ -1,4 +1,4 @@
-package captureEasy.UI.ActionGUIParts;
+package captureEasy.UI.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-import captureEasy.Library.Library;
+import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 
 public class ManageDocumentPanel extends Library implements MouseListener,MouseMotionListener{

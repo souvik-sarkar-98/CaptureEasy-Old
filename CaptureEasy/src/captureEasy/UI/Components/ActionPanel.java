@@ -1,4 +1,4 @@
-package captureEasy.UI.ActionGUIParts;
+package captureEasy.UI.Components;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,7 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 
-import captureEasy.Library.Library;
+import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.SensorGUI;
 

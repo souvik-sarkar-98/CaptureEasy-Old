@@ -21,12 +21,13 @@ import javax.swing.KeyStroke;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import captureEasy.Library.Library;
-import captureEasy.UI.ActionGUIParts.ActionPanel;
-import captureEasy.UI.ActionGUIParts.ManageDocumentPanel;
-import captureEasy.UI.ActionGUIParts.SavePanel;
-import captureEasy.UI.ActionGUIParts.SettingsPanel;
-import captureEasy.UI.ActionGUIParts.ViewPanel;
+
+import captureEasy.Resources.Library;
+import captureEasy.UI.Components.ActionPanel;
+import captureEasy.UI.Components.ManageDocumentPanel;
+import captureEasy.UI.Components.SavePanel;
+import captureEasy.UI.Components.SettingsPanel;
+import captureEasy.UI.Components.ViewPanel;
 
 import java.awt.event.KeyEvent;
 
@@ -79,8 +80,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(IsEmpty(TempFolder));
-				if((getProperty(PropertyFilePath,"DocPath")!=null) && IsEmpty(TempFolder))
+				if((getProperty(PropertyFilePath,"DocPath")!=null) && IsEmpty(getProperty(TempFilePath,"TempPath")))
 				{
 					dialog.dispose();
 					leaveControl=true;

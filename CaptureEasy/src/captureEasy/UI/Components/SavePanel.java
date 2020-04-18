@@ -1,4 +1,4 @@
-package captureEasy.UI.ActionGUIParts;
+package captureEasy.UI.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +34,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import captureEasy.Library.Library;
+import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
@@ -60,7 +60,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 	public JLabel label_1;
 	public JButton btnDone;
 	public static JProgressBar ProgressBar;
-
+	PopUp popup;
 	String existingfilepath;
 	String newFileName;
 
@@ -235,7 +235,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					btnNewButton.setBackground(Color.pink);
 					btnNewButton.requestFocusInWindow();
 					ActionGUI.dialog.setAlwaysOnTop(false);
-					new PopUp("ERROR","Error","Please choose a file!!","Ok, I understood","");
+					popup=new PopUp("ERROR","Error","Please choose a file!!","Ok, I understood","");
 					ActionGUI.dialog.setAlwaysOnTop(true);
 					lblEnterFilename.setVisible(false);
 					textField_Filename.setVisible(false);
@@ -249,7 +249,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					{
 						btnNewButton.setBackground(Color.YELLOW);
 						ActionGUI.dialog.setAlwaysOnTop(false);
-						new PopUp("INFO","info","Selected file '"+file.getName()+"' "
+						popup=new PopUp("INFO","info","Selected file '"+file.getName()+"' "
 								+ "is open for editing. To overwrite please close the file and select again. Otherwise enter filename to create a copy.",
 								"Ok, I understood","");
 						ActionGUI.dialog.setAlwaysOnTop(true);
@@ -284,7 +284,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		btnNewButton.setSize(new Dimension(20, 30));
 		Dimension size = btnNewButton.getSize();
 		try {
-			BufferedImage master = ImageIO.read(new File("C:\\Users\\USER\\Desktop\\Icons\\Significon-Attachment-512.png"));
+			BufferedImage master = ImageIO.read(new File("Icons/Significon-Attachment-512.png"));
 			Image scaled = master.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
 			btnNewButton.setIcon(new ImageIcon(scaled));
 		} catch (IOException e1) {
@@ -448,7 +448,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				textField_Filename.requestFocusInWindow();
 				if(ActionType.equalsIgnoreCase("Insert") && PopUp.control)
 					new PopUp("ERROR","error", "A file name can not contain any of the following "
-							+ "characters: \\ / : * ? " + Character.toString('"') + " < > | ","Ok, I understood","");
+							+ "characters: \\ / : * ? " + Character.toString('"') + " < > | ","Ok, I understood","").setAlwaysOnTop(true);;
 			}
 			else if ((new File(String.valueOf(subFolders(getProperty(PropertyFilePath,"DocPath"))) + "\\" + newFileName + ".docx")).exists()) 
 			{
@@ -459,8 +459,8 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				{
 					ActionGUI.dialog.setAlwaysOnTop(false);
 					new PopUp("ERROR","error","There is already a file with the same name in "+new File(String.valueOf(subFolders(getProperty(PropertyFilePath,"DocPath"))) 
-							+ "\\" + newFileName + ".docx").getParentFile()+" folder.","Ok, I understood","");
-					ActionGUI.dialog.setAlwaysOnTop(true);
+							+ "\\" + newFileName + ".docx").getParentFile()+" folder.","Ok, I understood","").setAlwaysOnTop(true);;
+					
 				}
 
 			}
@@ -469,6 +469,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				btnDone.setEnabled(true);
 				textField_Filename.setBackground(Color.WHITE);
 				textField_Filename.requestFocusInWindow();
+				
 			}
 			if(textField_Filename.getText().equalsIgnoreCase(""))
 				btnDone.setEnabled(false);

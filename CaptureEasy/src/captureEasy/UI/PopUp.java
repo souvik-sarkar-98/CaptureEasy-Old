@@ -38,6 +38,7 @@ public class PopUp extends JDialog{
 	int xx,xy;
 	public static boolean control=true;
 	public static boolean decision;
+	private  String Error_filepath="Icons/Icon_Error.png";
 
 	/**
 	 * Launch the application.
@@ -45,8 +46,10 @@ public class PopUp extends JDialog{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
 				try {
-					PopUp window = new PopUp("ERROR","j","A file name can not contain any of the following characters: \\\\ / : * ? ","Ok, I understood","Cancel");
+					PopUp window = new PopUp("ERROR","warning",this.getClass().getName()+"EXCEPTION ON SCREEN SHOYT  JADSB HHJSH HIAHNAAH HJKGLH BGKJHLH  GFJYGJHAKJB BUKHL HGHJGJKHKL HKHGAJLJLAHKLAK HKGJKJHAL BHJKK BJKBJKA","okk","");
+
 					window.setVisible(true);
 					
 				} catch (Exception e) {
@@ -63,8 +66,7 @@ public class PopUp extends JDialog{
 	public PopUp(String title,String PopUpType,String text,String OkButton_Text,String cancelButton_Text) 
 	{
 		control=false;
-		//new StackInfo(Thread.currentThread().getStackTrace());
-		try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){e.printStackTrace();}
+		try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
 		setResizable(false);
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		setUndecorated(true);
@@ -179,17 +181,16 @@ public class PopUp extends JDialog{
 			BufferedImage master;
 			if(PopUpType.equalsIgnoreCase("Error"))
 			{
-				filepath="C:\\Users\\USER\\Desktop\\Icons\\Icon_Error.png";
-				master = ImageIO.read(new File(filepath));
+				master = ImageIO.read(new File(Error_filepath));
 			}
 			else if(PopUpType.equalsIgnoreCase("Warning"))
 			{
-				filepath="C:\\Users\\USER\\Desktop\\Icons\\warning_icon.png";
+				filepath="Icons/warning_icon.png";
 				master = ImageIO.read(new File(filepath));
 			}
 			else
 			{
-				filepath="C:\\Users\\USER\\Desktop\\Icons\\info_icon.png";
+				filepath="Icons/info_icon.png";
 				master = ImageIO.read(new File(filepath));
 			}
 			Image scaled = master.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
@@ -210,6 +211,7 @@ public class PopUp extends JDialog{
 		panel_7.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JTextArea txtrExceptionOccuredPlease = new JTextArea();
+		txtrExceptionOccuredPlease.setToolTipText(text);
 		txtrExceptionOccuredPlease.setRows(5);
 		if(PopUpType.equalsIgnoreCase("Error"))
 		{
@@ -226,10 +228,18 @@ public class PopUp extends JDialog{
 		txtrExceptionOccuredPlease.setLineWrap(true);
 		txtrExceptionOccuredPlease.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtrExceptionOccuredPlease.setColumns(18);
+		int len=text.length();
+		
+		if(len>120)
+		{
+			text=text.substring(0, 120)+" "
+					+ "...";
+		}
 		txtrExceptionOccuredPlease.setText(text);
 		panel_7.add(txtrExceptionOccuredPlease);
 		
 		//revalidate();
-        setVisible(true);  
+        setVisible(true); 
+        try{getRootPane().setDefaultButton(btnNewButton);}catch(Exception e){}
 	}
 }
