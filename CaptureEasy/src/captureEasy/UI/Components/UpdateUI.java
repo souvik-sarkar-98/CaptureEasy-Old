@@ -1,8 +1,9 @@
-package captureEasy.UI;
+package captureEasy.UI.Components;
 
 import java.io.File;
 
 import captureEasy.Resources.Library;
+import captureEasy.UI.SensorGUI;
 
 public class UpdateUI extends Library implements Runnable {
 	

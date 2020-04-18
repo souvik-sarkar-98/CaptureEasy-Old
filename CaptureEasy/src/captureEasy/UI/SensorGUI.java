@@ -13,6 +13,8 @@ import captureEasy.UI.Components.SettingsPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -29,8 +31,6 @@ import javax.swing.JFrame;
 import java.awt.FlowLayout;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
-import javax.swing.JOptionPane;
-
 import java.awt.Toolkit;
 import java.awt.Font;
 
@@ -181,20 +181,19 @@ public class SensorGUI extends Library{
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
-					int dec=JOptionPane.showConfirmDialog(null, "Do you want to exit the application?\n", "Exit Application",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-					if(dec==0)
-					{
-						frame.dispose();
-						try{ActionGUI.dialog.dispose();}catch(Exception e5){}
-						SharedRepository.stopThread=true;
-						try {
-							GlobalScreen.unregisterNativeHook();
-						} catch (NativeHookException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+					PopUp p=new PopUp("Confirm Exit","warning","Do you want to exit the application?\n","Yes","No");
+					p.btnNewButton.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							try{ActionGUI.dialog.dispose();}catch(Exception e5){}
+							frame.dispose();
+							SharedRepository.stopThread=true;
+							try {
+								GlobalScreen.unregisterNativeHook();
+							} catch (NativeHookException e1) {
+								e1.printStackTrace();
+							}
 						}
-
-					}
+					});
 				}
 			}
 		});
@@ -222,8 +221,11 @@ public class SensorGUI extends Library{
 				{
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("Document");
-					tabs.add("Save");
-					tabs.add("View");
+					if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
+					{
+						tabs.add("Save");
+						tabs.add("View");
+					}
 					tabs.add("Settings");
 					frame.setAlwaysOnTop(false);
 					new ActionGUI(tabs);
@@ -248,6 +250,12 @@ public class SensorGUI extends Library{
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
+					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
+					{
+						new PopUp("INFORMATION","Info","You have nothing to view !! ","Ok, I understood","").setVisible(true);
+					}
+					else
+					{
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("View");
 					tabs.add("Save");
@@ -257,6 +265,7 @@ public class SensorGUI extends Library{
 					new ActionGUI(tabs);	
 
 					ActionGUI.dialog.setVisible(true);
+					}
 				}
 			}
 		});
@@ -276,19 +285,26 @@ public class SensorGUI extends Library{
 		label_Save.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(ActionGUI.leaveControl)
+				if(ActionGUI.leaveControl )
 				{
-					List<String> tabs=new ArrayList<String>();
-					tabs.add("Save");
-					tabs.add("View");
-					tabs.add("Document");
-					tabs.add("Settings");
-					frame.setAlwaysOnTop(false);
-					ActionGUI act=new ActionGUI(tabs);
-					ActionGUI.dialog.setVisible(true);
-					act.savePanel.textField_Filename.requestFocusInWindow();
-					act.savePanel.rdbtnNewDoc.setEnabled(false);
-					act.savePanel.btnDone.setEnabled(false);
+					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
+					{
+						new PopUp("INFORMATION","Info","You have nothing to save !! ","Ok, I understood","").setVisible(true);
+					}
+					else
+					{
+						List<String> tabs=new ArrayList<String>();
+						tabs.add("Save");
+						tabs.add("View");
+						tabs.add("Document");
+						tabs.add("Settings");
+						frame.setAlwaysOnTop(false);
+						ActionGUI act=new ActionGUI(tabs);
+						ActionGUI.dialog.setVisible(true);
+						act.savePanel.textField_Filename.requestFocusInWindow();
+						act.savePanel.rdbtnNewDoc.setEnabled(false);
+						act.savePanel.btnDone.setEnabled(false);
+					}
 				}
 			}
 		});
@@ -309,11 +325,19 @@ public class SensorGUI extends Library{
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
-					int dec=JOptionPane.showConfirmDialog(null, "Are you sure that you want to delete all screenshots?", "Delete screenshots",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-					if(dec==0)
+					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
 					{
-						Library.c=0;
-						updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
+						new PopUp("INFORMATION","Info","You have nothing to delete !! ","Ok, I understood","").setVisible(true);
+					}
+					else
+					{
+						PopUp p=new PopUp("Confirm Delete","warning","Are you sure that you want to delete all screenshots?","Yes","No");
+						p.btnNewButton.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								Library.c=0;
+								updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
+							}
+						});
 					}
 				}
 			}
@@ -348,7 +372,6 @@ public class SensorGUI extends Library{
 				{
 					captureScreen();
 				}
-
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -387,7 +410,7 @@ public class SensorGUI extends Library{
 						Main_panel.setSize(new Dimension(54, 500));
 						button_panel.setVisible(true);
 						label_Menu.setToolTipText("Click here to collapse");
-						
+
 					}
 					popupMenu = new JPopupMenu();
 					popupMenu.setPopupSize(new Dimension(150, 60));
@@ -424,8 +447,11 @@ public class SensorGUI extends Library{
 				{
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("Settings");
-					tabs.add("Save");
-					tabs.add("View");
+					if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
+					{
+						tabs.add("Save");
+						tabs.add("View");
+					}
 					tabs.add("Document");
 					frame.setAlwaysOnTop(false);
 					new ActionGUI(tabs);

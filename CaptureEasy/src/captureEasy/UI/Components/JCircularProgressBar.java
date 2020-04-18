@@ -1,4 +1,4 @@
-package captureEasy.UI;
+package captureEasy.UI.Components;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,6 @@ import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import captureEasy.Resources.Library;
-import captureEasy.UI.Components.SavePanel;
 
 public class JCircularProgressBar extends BasicProgressBarUI implements Runnable{
 	

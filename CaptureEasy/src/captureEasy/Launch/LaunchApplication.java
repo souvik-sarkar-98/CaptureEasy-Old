@@ -1,16 +1,18 @@
 package captureEasy.Launch;
 import captureEasy.ActionHandeler.ActionStrokeListener;
+import captureEasy.Resources.DeleteResidue;
 import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
-import captureEasy.UI.UpdateUI;
+import captureEasy.UI.Components.UpdateUI;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.io.FileUtils;
 import org.jnativehook.GlobalScreen;
 
 public class LaunchApplication extends Library{
@@ -59,7 +61,6 @@ public class LaunchApplication extends Library{
 				updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 			}
 			GlobalScreen.addNativeKeyListener(new ActionStrokeListener());
-			GlobalScreen.addNativeMouseListener(new ActionStrokeListener());
 			try {
 				GlobalScreen.registerNativeHook();
 			} catch (Exception e) {
@@ -73,7 +74,8 @@ public class LaunchApplication extends Library{
 			sn.label_Menu.setEnabled(true);
 			sn.sensor_panel.setEnabled(true);
 			new Thread(new UpdateUI()).start();
-
+			new Thread(new DeleteResidue()).start();;
+			
 		}
 	}
 }

@@ -209,7 +209,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 				SettingsPanel.lblLocationx.setText("Location : ( "+getProperty(PropertyFilePath,"Xlocation")+" , "+getProperty(PropertyFilePath,"Ylocation")+" )");
 			}
 			settingsPanel.SettingsPane_Framepanel_AltPrtSc.setSelected(Boolean.valueOf(getProperty(PropertyFilePath,"PrtSCSS")));
-			//dialog.getRootPane().setDefaultButton(this.SettingsPane_Btnpanel_SaveBtn);
+			dialog.getRootPane().setDefaultButton(settingsPanel.SettingsPane_Btnpanel_SaveBtn);
 		}
 	}
 }

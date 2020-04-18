@@ -38,7 +38,10 @@ public class PopUp extends JDialog{
 	int xx,xy;
 	public static boolean control=true;
 	public static boolean decision;
-	private  String Error_filepath="Icons/Icon_Error.png";
+	public  String Error_filepath="Icons/Icon_Error.png";
+	public JButton btnNewButton;
+	public JButton btnNo;
+	public JTextArea txtrExceptionOccuredPlease;
 
 	/**
 	 * Launch the application.
@@ -48,9 +51,11 @@ public class PopUp extends JDialog{
 			public void run() {
 				
 				try {
-					PopUp window = new PopUp("ERROR","warning",this.getClass().getName()+"EXCEPTION ON SCREEN SHOYT  JADSB HHJSH HIAHNAAH HJKGLH BGKJHLH  GFJYGJHAKJB BUKHL HGHJGJKHKL HKHGAJLJLAHKLAK HKGJKJHAL BHJKK BJKBJKA","okk","");
-
+					PopUp window = new PopUp("ERROR","warning",this.getClass().getName()+"EXCEPTION ON SCREEN SHOYT ","ok","Cance;");
 					window.setVisible(true);
+					
+					//do{Thread.sleep(100);}while(!PopUp.control);
+					System.out.println(decision);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -110,7 +115,7 @@ public class PopUp extends JDialog{
 		panel_2.setBackground(SystemColor.menu);
 		panel.add(panel_2, BorderLayout.SOUTH);
 		
-		JButton btnNewButton = new JButton();
+		btnNewButton = new JButton();
 		btnNewButton.setVisible(false);
 		if(!OkButton_Text.equalsIgnoreCase(""))
 		{
@@ -120,8 +125,10 @@ public class PopUp extends JDialog{
 			btnNewButton.setSelected(true);
 		}	
 		btnNewButton.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
 				try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
+				btnNewButton.setSelected(true);
 				control=true;
 				decision=true;
 				dispose();
@@ -131,7 +138,7 @@ public class PopUp extends JDialog{
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel_2.add(btnNewButton);
 		
-		JButton btnNo = new JButton();
+		btnNo = new JButton();
 		
 		btnNo.setVisible(false);
 		if(!cancelButton_Text.equalsIgnoreCase(""))
@@ -140,6 +147,7 @@ public class PopUp extends JDialog{
 			btnNo.setText(cancelButton_Text);
 			btnNo.setToolTipText("Click");
 		}
+		
 		btnNo.setBackground(new Color(204, 204, 255));
 		btnNo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnNo.addActionListener(new ActionListener() {
@@ -148,6 +156,7 @@ public class PopUp extends JDialog{
 				dispose();
 				control=true;
 				decision=false;
+				
 			}
 		});
 
@@ -169,6 +178,10 @@ public class PopUp extends JDialog{
 		panel_6.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		panel_6.setBackground(new Color(255, 255, 204));
 		panel_6.setBounds(12, 13, 377, 125);
+		if(OkButton_Text.equals("") && cancelButton_Text.equals(""))
+		{
+			panel_6.setBounds(12, 13, 377, 155);
+		}
 		panel_5.add(panel_6);
 		
 		JLabel lblIcon = new JLabel("Icon");
@@ -210,7 +223,7 @@ public class PopUp extends JDialog{
 		panel_6.add(panel_7);
 		panel_7.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JTextArea txtrExceptionOccuredPlease = new JTextArea();
+		txtrExceptionOccuredPlease = new JTextArea();
 		txtrExceptionOccuredPlease.setToolTipText(text);
 		txtrExceptionOccuredPlease.setRows(5);
 		if(PopUpType.equalsIgnoreCase("Error"))

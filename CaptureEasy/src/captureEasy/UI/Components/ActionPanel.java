@@ -99,6 +99,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 		panel_4.add(rdbtnDeletePreviousWork);
 
 		JButton btnProceed = new JButton("Proceed ");
+		ActionGUI.dialog.getRootPane().setDefaultButton(btnProceed);
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(rdbtnSavePreviousWork.isSelected())
@@ -129,7 +130,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				else
 				{
 					Library.c=0;
-					updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/")+new Random().nextInt(1000000000));
+					updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 					ActionGUI.dialog.dispose();
 					ActionGUI.leaveControl=true;
 					try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}

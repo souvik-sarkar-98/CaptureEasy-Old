@@ -29,6 +29,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.jnativehook.mouse.NativeMouseEvent;
 
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
@@ -234,14 +235,19 @@ public class Library extends SharedRepository
 				//Control focus
 				SensorGUI.frame.setVisible(false); 
 				do{}while(SensorGUI.frame.isVisible());
+				String text=(String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null).getTransferData(DataFlavor.stringFlavor);
+
 				Robot r=new Robot();
 				r.keyPress(KeyEvent.VK_ALT);
 				r.keyPress(KeyEvent.VK_PRINTSCREEN);
 				r.keyRelease(KeyEvent.VK_PRINTSCREEN);
 				r.keyRelease(KeyEvent.VK_ALT);
 				Thread.sleep(1000);
-				image = (BufferedImage) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(DataFlavor.imageFlavor);
+				Transferable t =  Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+				image=(BufferedImage) t.getTransferData(DataFlavor.imageFlavor);
 				SensorGUI.frame.setVisible(true);
+				resetClipboard(text);
+				
 			}
 			else
 			{
@@ -369,6 +375,7 @@ public class Library extends SharedRepository
 		
 		}
 	}
+	
 
 }
 

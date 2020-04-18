@@ -54,6 +54,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 	public JComboBox<?> comboBox_ImageFormat;
 	int Xlocation,Ylocation;
 	SensorGUI sen;
+	private JComboBox<?> comboBox;
 	
 	public SettingsPanel(JTabbedPane TabbledPanel)
 	{
@@ -242,15 +243,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 							SensorGUI.clickable=false;
 							btnUpdateFrameLocation.setText("Done");
 						}
-						/*if(SettingsPane_DocFolderPanel_textField_DocDestFolder.getText().equals("") || !btnUpdateFrameLocation.getText().equalsIgnoreCase("Update frame location"))
-						{
-							SettingsPane_Btnpanel_SaveBtn.setEnabled(false);
-						}
-						else
-						{
-							System.err.println("886");
-							SettingsPane_Btnpanel_SaveBtn.setEnabled(true);
-						}*/
+						
 					}
 				});
 				btnUpdateFrameLocation.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -376,9 +369,21 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 					SettingsPane_Btnpanel_SaveBtn.setForeground(Color.BLACK);
 					SettingsPane_Btnpanel_SaveBtn.setBorder(new LineBorder(new Color(0, 0, 0)));
 					SettingsPane_Btnpanel_SaveBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
-					SettingsPane_Btnpanel_SaveBtn.setBounds(155, 5, 100, 25);
+					SettingsPane_Btnpanel_SaveBtn.setBounds(100, 5, 100, 25);
 					SettingsPane_Btnpanel.add(SettingsPane_Btnpanel_SaveBtn);
 				}
+				
+				JButton btnNewButton = new JButton("Cancel");
+				btnNewButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						ActionGUI.dialog.dispose();
+						ActionGUI.leaveControl=true;
+						try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e5){}
+					}
+				});
+				btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+				btnNewButton.setBounds(212, 5, 100, 25);
+				SettingsPane_Btnpanel.add(btnNewButton);
 			}
 		}
 		{	
@@ -388,21 +393,31 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 			SettingsPane.add(panel);
 			panel.setLayout(null);
 			{
-				JLabel lblImageFormat = new JLabel("Image format ");
-				lblImageFormat.setBounds(26, 8, 92, 16);
+				JLabel lblImageFormat = new JLabel("Image format");
+				lblImageFormat.setBounds(12, 8, 92, 16);
 				lblImageFormat.setFont(new Font("Tahoma", Font.BOLD, 13));
 				panel.add(lblImageFormat);
 			}
 			{
 				String[] imageFormats={"PNG","JPG","JPEG","BMP"};
 				comboBox_ImageFormat = new JComboBox<Object>(imageFormats);
-				comboBox_ImageFormat.setLocation(123, 5);
+				comboBox_ImageFormat.setLocation(111, 5);
 				comboBox_ImageFormat.setSelectedIndex(0);
 				comboBox_ImageFormat.setPreferredSize(new Dimension(60, 22));
-				comboBox_ImageFormat.setSize(new Dimension(60, 22));
+				comboBox_ImageFormat.setSize(new Dimension(75, 22));
 				panel.add(comboBox_ImageFormat);
 
 			}
+			
+			JLabel lblNewLabel = new JLabel("Capture key");
+			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+			lblNewLabel.setBounds(12, 41, 92, 16);
+			panel.add(lblNewLabel);
+			
+			String[] captureKey={"PrtSc","F7","F8","F9","Esc"};
+			comboBox = new JComboBox<Object>(captureKey);
+			comboBox.setBounds(111, 40, 75, 22);
+			panel.add(comboBox);
 		}
 	}
 	@Override

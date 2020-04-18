@@ -348,7 +348,10 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		panel_Save_Buttons = new JPanel();
 		panel_Save_Buttons.setBorder(new MatteBorder(0, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		panel_Save_Buttons.setBounds(12, 259, 413, 46);
+		panel_Save_Buttons.setLayout(null);
 		btnDone = new JButton("Okay");
+		btnDone.setMargin(new Insets(2, 5, 2, 5));
+		btnDone.setBounds(130, 5, 73, 29);
 		btnDone.setBackground(Color.BLUE);
 		btnDone.setForeground(Color.BLACK);
 		panel_Save_Buttons.add(btnDone);
@@ -383,7 +386,9 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 
 		btnDone.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		exitbtn = new JButton("Exit");
+		exitbtn = new JButton("Cancel");
+		exitbtn.setMargin(new Insets(2, 5, 2, 5));
+		exitbtn.setBounds(210, 5, 87, 29);
 		exitbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ActionGUI.dialog.dispose();
