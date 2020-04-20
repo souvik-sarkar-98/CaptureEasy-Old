@@ -17,7 +17,6 @@ public class Update extends Library implements Runnable {
 				SensorGUI.label_Count.setText(String.valueOf(count)); 
 				SensorGUI.frame.setAlwaysOnTop(true);
 			}catch(Exception w){}
-			clearTemp();
 		}
 	}
 

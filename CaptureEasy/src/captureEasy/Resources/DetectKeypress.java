@@ -1,4 +1,4 @@
-package captureEasy.ActionHandeler;
+package captureEasy.Resources;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -11,13 +11,11 @@ import java.io.IOException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import captureEasy.Resources.Library;
-import captureEasy.Resources.SharedRepository;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.SensorGUI;
 
 
-public class ActionStrokeListener extends Library implements NativeKeyListener  {
+public class DetectKeypress extends Library implements NativeKeyListener  {
 	int key=0;
 
 	public void nativeKeyPressed(NativeKeyEvent e) 

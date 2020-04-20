@@ -227,7 +227,7 @@ public class Library extends SharedRepository
 		String Imageformat=getProperty(PropertyFilePath,"ImageFormat").toLowerCase();
 		if(Imageformat==null)
 		{
-			
+
 		}
 		SensorGUI.frame.setLocation(10000,10000);
 		try {
@@ -276,7 +276,7 @@ public class Library extends SharedRepository
 				return i;
 			}
 		});
-		
+
 		for(int i=0;i<files.length;i++)
 		{
 			InputStream pic;
@@ -287,7 +287,7 @@ public class Library extends SharedRepository
 				run.addPicture(pic, XWPFDocument.PICTURE_TYPE_PNG, files[i].getName(), Units.toEMU(470), Units.toEMU(265));
 				SharedRepository.progress=(int)Math.round(((Double.valueOf(i+1))/Double.valueOf(files.length))*100);
 				//System.err.println((int)Math.round(((Double.valueOf(i+1))/Double.valueOf(files.length))*100));
-				
+
 				pic.close();
 			} catch (InvalidFormatException | IOException e) {
 				logError(e,e.getClass().getName()+" occured while pasteing '"+files[(int) i].getName()+"'. File Path: "+files[i].getPath());
@@ -318,7 +318,7 @@ public class Library extends SharedRepository
 			c=0;
 			SharedRepository.progress=0;
 			SavePanel.lblUpdatingFiles.setText("Saving "+testName+".docx");
-  			SavePanel.lblUpdatingFiles.setText(""+testName+".docx is ready to use.");
+			SavePanel.lblUpdatingFiles.setText(""+testName+".docx is ready to use.");
 			updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 		}
 		catch(Exception e)	{
@@ -364,33 +364,40 @@ public class Library extends SharedRepository
 			addToExistingWordDocument=null;
 			c=0;
 			SharedRepository.progress=0;
-  			SavePanel.lblUpdatingFiles.setText(fOut+" is ready to use.");
+			SavePanel.lblUpdatingFiles.setText(fOut+" is ready to use.");
 			updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 		}
 		catch(Exception e){
 			logError(e,e.getClass().getName()+" occured while addToExistingWord. Path :"+filePath+" \nModified File name: "+fileName);
 
 			new PopUp("ERROR","error",e.getClass().getName()+" occured while addToExistingWord. Visit 'Error.log for more details.","Ok, I understood","").setVisible(true);
-		
+
 		}
 	}
-	
-	public static void clearTemp()
+
+	public static void AlwaysClearTemp()
 	{
-		try{
-			File file=new File(createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp"));
-			File[] filesdelete=file.listFiles();
-			for(File f:filesdelete)
-			{
-				if(!f.equals(new File(getProperty(TempFilePath,"TempPath"))))
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				while (!stopThread)
 				{
-					FileUtils.deleteDirectory(f);
+					try{
+						File file=new File(createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp"));
+						File[] filesdelete=file.listFiles();
+						for(File f:filesdelete)
+						{
+							if(!f.equals(new File(getProperty(TempFilePath,"TempPath"))))
+							{
+								FileUtils.deleteDirectory(f);
+							}
+						}
+						Thread.sleep(10000);
+					}catch(Exception w){}
 				}
 			}
-			Thread.sleep(10000);
-		}catch(Exception w){}
+		}).start();	
 	}
-	
-
 }
 

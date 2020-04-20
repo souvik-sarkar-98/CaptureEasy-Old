@@ -1,5 +1,5 @@
 package captureEasy.Launch;
-import captureEasy.ActionHandeler.ActionStrokeListener;
+import captureEasy.Resources.DetectKeypress;
 import captureEasy.Resources.Library;
 import captureEasy.Resources.Update;
 import captureEasy.UI.ActionGUI;
@@ -63,7 +63,7 @@ public class LaunchApplication extends Library{
 			{
 				updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 			}
-			GlobalScreen.addNativeKeyListener(new ActionStrokeListener());
+			GlobalScreen.addNativeKeyListener(new DetectKeypress());
 			try {
 				GlobalScreen.registerNativeHook();
 			} catch (Exception e) {
@@ -77,6 +77,8 @@ public class LaunchApplication extends Library{
 			sn.label_Menu.setEnabled(true);
 			sn.sensor_panel.setEnabled(true);
 			new Thread(new Update()).start();
+			AlwaysClearTemp();
+			
 		}
 	}
 }

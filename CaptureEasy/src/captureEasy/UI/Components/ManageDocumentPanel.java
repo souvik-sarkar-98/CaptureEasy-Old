@@ -1,12 +1,15 @@
 package captureEasy.UI.Components;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +117,13 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			btnGo = new JButton("GO");
 			btnGo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					try {
+						/// temporary implementation
+						Desktop.getDesktop().open(new File (getProperty(PropertyFilePath,"DocPath")));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			btnGo.setBorder(new LineBorder(new Color(0, 0, 0)));
