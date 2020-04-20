@@ -106,8 +106,8 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							imgId--;
 							if(imgId<0)	
 							{
-								p=new PopUp("Informtion","info","This the last image", "", "");
-								p.setVisible(true);
+								/*p=new PopUp("Informtion","info","This the last image", "", "");
+								p.setVisible(true);*/
 								imgId=files.length-1;
 							}
 							try {
@@ -159,8 +159,8 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							imgId++;
 							if(imgId>files.length-1)	
 							{
-								p=new PopUp("Informtion","info","This the first image", "", "");
-								p.setVisible(true);
+								/*p=new PopUp("Informtion","info","This the first image", "", "");
+								p.setVisible(true);*/
 								imgId=0;
 							}
 							try {
@@ -201,6 +201,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							p.setVisible(true);
 							p.btnNewButton.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent arg0) {
+									p.dispose();
 									files[imgId].delete();
 									files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
 									try {
