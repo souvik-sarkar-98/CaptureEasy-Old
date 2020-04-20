@@ -230,7 +230,7 @@ public class Library extends SharedRepository
 		SensorGUI.frame.setLocation(10000,10000);
 		try {
 			BufferedImage image ;
-			String screenshot_name = String.valueOf(c++) + "." + Imageformat;
+			String screenshot_name = String.valueOf(++c) + "." + Imageformat;
 			image = (new Robot()).createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 			File file = new File(String.valueOf(createFolder(getProperty(TempFilePath,"TempPath"))) + "\\" + screenshot_name);
 			ImageIO.write(image, Imageformat, file);
