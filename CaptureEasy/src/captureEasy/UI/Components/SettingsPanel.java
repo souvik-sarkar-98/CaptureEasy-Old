@@ -329,7 +329,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 						//SettingsPane_Btnpanel_SaveBtn.setEnabled(false);
 						SettingsPane_Btnpanel_SaveBtn.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								String DocPath_Current=SettingsPane_DocFolderPanel_textField_DocDestFolder.getText().replaceAll("\\s", "");
+								String DocPath_Current=SettingsPane_DocFolderPanel_textField_DocDestFolder.getText();
 								String DocPath_Previous=getProperty(PropertyFilePath,"DocPath");
 								String arrangeSSDatewise_Current=String.valueOf(rdbtnDate.isSelected());
 								String arrangeSSDatewise_Previous=getProperty(PropertyFilePath,"ArrangeSSDatewise");
