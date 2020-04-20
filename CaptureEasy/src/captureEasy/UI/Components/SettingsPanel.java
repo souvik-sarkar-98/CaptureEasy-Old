@@ -522,13 +522,24 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 			lblNewLabel.setBounds(12, 41, 92, 16);
 			panel.add(lblNewLabel);
 
-			String[] captureKey={"PrtSc","Ctrl+ALT","F7","F8","F9"};
+			String[] captureKey={"PrtSc","Ctrl+ALT","Ctrl+Shift","F7","F8","F9"};
 			comboBox_CaptureKey = new JComboBox<Object>(captureKey);
+			
+			comboBox_CaptureKey.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(ActionGUI.dialog.isVisible() && ActionGUI.tagDrop)
+					{
+						new PopUp("Information","info","Please pause the application while you are using "+comboBox_CaptureKey.getSelectedItem().toString()+" button for other use.","Ok,I'll Remember","").setVisible(true);
+					}
+					ActionGUI.tagDrop=true;
+				}
+			});
 			comboBox_CaptureKey.setBounds(111, 40, 75, 22);
 			comboBox_CaptureKey.setSelectedIndex(0);
 			panel.add(comboBox_CaptureKey);
 		}
 	}
+	
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		ActionGUI.xDialog = arg0.getXOnScreen();
@@ -541,6 +552,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 		ActionGUI.xxDialog = e.getX();
 		ActionGUI.xyDialog = e.getY();
 	}
+	
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub

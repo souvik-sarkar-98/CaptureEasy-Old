@@ -37,6 +37,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 	JButton btnGo;
 	public static List<String> monthList=new ArrayList<String>();
 	public static List<String> dayList=new ArrayList<String>();
+	//public static List<
 	public static JComboBox<Object> month_1;
 	public static JComboBox<Object> day;
 
@@ -61,6 +62,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			rdbtnViewDocuments.setSelected(true);
 			rdbtnViewDocuments.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					rdbtnViewDocuments.setSelected(true);// temporary
 				}
 			});
 			rdbtnViewDocuments.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -107,7 +109,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			panel_2.add(day);
 
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(12, 42, 391, 160);
+			scrollPane.setBounds(12, 42, 391, 182);
 			panel_2.add(scrollPane);
 
 			JPanel panel_3 = new JPanel();

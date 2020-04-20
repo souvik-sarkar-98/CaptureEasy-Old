@@ -202,7 +202,7 @@ public class SensorGUI extends Library{
 		});
 		lebel_Power.setBackground(Color.WHITE);
 		lebel_Power.setBorder(null);
-		lebel_Power.setToolTipText("Click here to Minimize or Close");
+		lebel_Power.setToolTipText("Click here to exit application");
 		try{
 			lebel_Power.setIcon(new ImageIcon(ImageIO.read(powericon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 		} catch (IOException e) {

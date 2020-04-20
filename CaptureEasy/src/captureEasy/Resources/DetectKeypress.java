@@ -43,21 +43,22 @@ public class DetectKeypress extends Library implements NativeKeyListener  {
 				ActionGUI.leaveControl=true;
 			}
 		}
-		else if(key==29 && e.getKeyCode() ==56)
+		else if(key==29 && e.getKeyCode() ==56 && captureKey.equalsIgnoreCase("Ctrl+ALT") && ActionGUI.leaveControl && !SharedRepository.PauseThread)
 		{
-			if(captureKey.equalsIgnoreCase("Ctrl+ALT") && ActionGUI.leaveControl && !SharedRepository.PauseThread)
-				captureScreen();
-
+			captureScreen();
 		}
-		System.out.println(key+"  "+e.getKeyCode());
+		else if(key==29 && e.getKeyCode() ==42 && captureKey.equalsIgnoreCase("Ctrl+Shift") && ActionGUI.leaveControl && !SharedRepository.PauseThread)
+		{
+			captureScreen();
+		}
 		if(key==0)
-		key=e.getKeyCode();
+			key=e.getKeyCode();
 	}
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		if(key==e.getKeyCode())
-		key=0;
+			key=0;
 	}
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent e) {

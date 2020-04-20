@@ -46,8 +46,8 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 	public SavePanel savePanel;
 	List<String> tabs;
 	public static int xDialog,yDialog, xyDialog,xxDialog;
-	public static boolean leaveControl=true;
-
+	public static boolean leaveControl=true,tagDrop=true;
+	
 	
 	@SuppressWarnings({ })
 	public ActionGUI(List<String> tabs)
@@ -194,7 +194,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 		}
 		else if(tabName.contains("Settings"))
 		{
-
+			tagDrop=false;
 			String path=getProperty(PropertyFilePath,"DocPath");
 			settingsPanel.SettingsPane_DocFolderPanel_textField_DocDestFolder.setText(path);
 			if(!"".equals(path))
