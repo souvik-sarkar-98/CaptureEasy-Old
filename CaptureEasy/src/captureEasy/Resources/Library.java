@@ -21,6 +21,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -371,6 +373,22 @@ public class Library extends SharedRepository
 			new PopUp("ERROR","error",e.getClass().getName()+" occured while addToExistingWord. Visit 'Error.log for more details.","Ok, I understood","").setVisible(true);
 		
 		}
+	}
+	
+	public static void clearTemp()
+	{
+		try{
+			File file=new File(createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp"));
+			File[] filesdelete=file.listFiles();
+			for(File f:filesdelete)
+			{
+				if(!f.equals(new File(getProperty(TempFilePath,"TempPath"))))
+				{
+					FileUtils.deleteDirectory(f);
+				}
+			}
+			Thread.sleep(10000);
+		}catch(Exception w){}
 	}
 	
 

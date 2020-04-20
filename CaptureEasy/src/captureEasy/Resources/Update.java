@@ -1,12 +1,11 @@
-package captureEasy.UI.Components;
+package captureEasy.Resources;
 
 import java.io.File;
 
-import captureEasy.Resources.Library;
 import captureEasy.UI.SensorGUI;
 
 
-public class UpdateUI extends Library implements Runnable {
+public class Update extends Library implements Runnable {
 	
 
 	@Override
@@ -18,9 +17,7 @@ public class UpdateUI extends Library implements Runnable {
 				SensorGUI.label_Count.setText(String.valueOf(count)); 
 				SensorGUI.frame.setAlwaysOnTop(true);
 			}catch(Exception w){}
-			
-			
-			
+			clearTemp();
 		}
 	}
 

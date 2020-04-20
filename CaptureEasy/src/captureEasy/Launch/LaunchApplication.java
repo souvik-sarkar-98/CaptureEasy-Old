@@ -1,11 +1,10 @@
 package captureEasy.Launch;
 import captureEasy.ActionHandeler.ActionStrokeListener;
-import captureEasy.Resources.DeleteResidue;
 import captureEasy.Resources.Library;
+import captureEasy.Resources.Update;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
-import captureEasy.UI.Components.UpdateUI;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -77,9 +76,7 @@ public class LaunchApplication extends Library{
 			SensorGUI.frame.setVisible(true);
 			sn.label_Menu.setEnabled(true);
 			sn.sensor_panel.setEnabled(true);
-			new Thread(new UpdateUI()).start();
-			new Thread(new DeleteResidue()).start();;
-			
+			new Thread(new Update()).start();
 		}
 	}
 }
