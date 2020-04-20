@@ -7,6 +7,8 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,12 +22,20 @@ import javax.swing.border.MatteBorder;
 
 import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
+import captureEasy.UI.PopUp;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ManageDocumentPanel extends Library implements MouseListener,MouseMotionListener{
 
 	public JPanel DocumentScrollPane;
 	JScrollPane scrollPane;
 	JButton btnGo;
+	public static List<String> monthList=new ArrayList<String>();
+	public static List<String> dayList=new ArrayList<String>();
+	public static JComboBox<Object> month_1;
+	public static JComboBox<Object> day;
 
 	public ManageDocumentPanel(JTabbedPane TabbledPanel)
 	{
@@ -33,7 +43,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			DocumentScrollPane = new JPanel();
 			DocumentScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 			DocumentScrollPane.setBackground(Color.WHITE);
-			DocumentScrollPane.setSize(new Dimension(400, 200));
+			DocumentScrollPane.setSize(new Dimension(437, 315));
 			DocumentScrollPane.addMouseListener(this);
 			DocumentScrollPane.addMouseMotionListener(this);
 			DocumentScrollPane.setLayout(null);
@@ -45,11 +55,22 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			panel.setLayout(null);
 
 			JRadioButton rdbtnViewDocuments = new JRadioButton("View Documents");
+			rdbtnViewDocuments.setSelected(true);
+			rdbtnViewDocuments.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			rdbtnViewDocuments.setFont(new Font("Tahoma", Font.BOLD, 16));
 			rdbtnViewDocuments.setBounds(20, 10, 163, 25);
 			panel.add(rdbtnViewDocuments);
 
 			JRadioButton rdbtnNewRadioButton = new JRadioButton("Search Documents");
+			rdbtnNewRadioButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new PopUp("Information","info","Sorry !! This facility is currently  unavailable.","Ok, Fine","").setVisible(true);
+					rdbtnNewRadioButton.setSelected(false);
+				}
+			});
 			rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 			rdbtnNewRadioButton.setBounds(215, 10, 179, 25);
 			panel.add(rdbtnNewRadioButton);
@@ -65,17 +86,19 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			lblMonth.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			panel_2.add(lblMonth);
 
-			JComboBox<Object> month = new JComboBox<Object>();
-			month.setBounds(85, 10, 85, 22);
-			month.setPreferredSize(new Dimension(75, 22));
-			panel_2.add(month);
+			month_1 = new JComboBox<Object>(monthList.toArray());
+			month_1.setBounds(85, 10, 85, 22);
+			month_1.setPreferredSize(new Dimension(75, 22));
+			//month_1.setSelectedIndex(0);
+			panel_2.add(month_1);
 
 			JLabel lblDay = new JLabel("Day");
 			lblDay.setBounds(190, 10, 30, 20);
 			lblDay.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			panel_2.add(lblDay);
 
-			JComboBox<Object> day = new JComboBox<Object>();
+			day = new JComboBox<Object>(dayList.toArray());
+			//day.setSelectedIndex(0);
 			day.setBounds(225, 10, 85, 22);
 			day.setPreferredSize(new Dimension(75, 22));
 			panel_2.add(day);
@@ -89,6 +112,10 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			panel_3.setLayout(null);
 
 			btnGo = new JButton("GO");
+			btnGo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnGo.setBorder(new LineBorder(new Color(0, 0, 0)));
 			btnGo.setForeground(Color.BLACK);
 			btnGo.setBackground(Color.BLUE);

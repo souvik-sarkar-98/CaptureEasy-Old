@@ -19,7 +19,6 @@ public class DeleteResidue extends Library implements Runnable {
 					{
 						FileUtils.deleteDirectory(f);
 					}
-					
 				}
 				Thread.sleep(10000);
 			}catch(Exception w){}

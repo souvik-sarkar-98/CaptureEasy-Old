@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
 import org.jnativehook.GlobalScreen;
 
 public class LaunchApplication extends Library{
@@ -22,8 +21,7 @@ public class LaunchApplication extends Library{
 		Perform();
 	}
 	public static void Perform() 
-	{
-		
+	{	
 		if(!(new File(createFolder(Log4jPropertyFilePath)).exists()))
 		{
 			setLog4jProperty();
@@ -37,8 +35,14 @@ public class LaunchApplication extends Library{
 			tabs.add("Settings");
 			ActionGUI act=new ActionGUI(tabs);
 			ActionGUI.dialog.setVisible(true);
-			act.settingsPanel.SettingsPane_DocFolderPanel_DocDest.setText("Set document destination folder");
+			act.settingsPanel.chckbxUpdateDocumentDestination.setText("Set document destination folder");
 			act.settingsPanel.btnUpdateFrameLocation.setText("Set frame location");
+			act.settingsPanel.chckbxUpdateDocumentDestination.setSelected(true);
+			act.settingsPanel.SettingsPane_DocFolderPanel_textField_DocDestFolder.setEnabled(true);
+			act.settingsPanel.SettingsPane_DocFolderPanel_Chooser.setEnabled(true);
+			act.settingsPanel.comboBox_CaptureKey.setSelectedIndex(0);
+			act.settingsPanel.comboBox_ImageFormat.setSelectedIndex(0);
+					
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 		}
 		else if (new File(createFolder(PropertyFilePath)).exists() &&  !IsEmpty(createFolder(getProperty(TempFilePath,"TempPath"))))

@@ -12,17 +12,11 @@ public class SharedRepository{
 
 	public static String Log4jPropertyFilePath=System.getProperty("user.dir")+"/CaptureEasy/Properties/Log4j.properties";
 	public static String LogFolderPath=System.getProperty("user.dir")+"/CaptureEasy/Logs";
-	//public static String TempFolder;
-	//delete later
-	public static String sourceProjectFolderPath=System.getProperty("user.dir")+"/src";
 
 	public static Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static Logger logger = Logger.getLogger(SharedRepository.class);
-		
-	//public static boolean Runflag=true;
 	
-	public static String ClipboardStatus="Useable";
-	public static boolean loopControl=true;
+	public static boolean PauseThread=false;
 	public static boolean stopThread=false;
 	
 	public static int progress=0;

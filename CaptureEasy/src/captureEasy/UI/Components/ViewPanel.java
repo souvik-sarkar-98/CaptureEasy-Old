@@ -17,13 +17,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.Timer;
 import javax.swing.border.MatteBorder;
 
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-
 import captureEasy.Resources.Library;
-import captureEasy.Resources.SharedRepository;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 
@@ -39,6 +36,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 	JPanel panel_Button;
 	File[] files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
 	int imgId;
+	PopUp p = null;
 	public ViewPanel(JTabbedPane TabbledPanel)
 	{
 		files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
@@ -99,20 +97,29 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					label_Prev.setToolTipText("Swipe left");
 					label_Prev.setBounds(160, 5, 33, 25);
 					panel_Button.add(label_Prev);
+					
 					label_Prev.addMouseListener(new MouseAdapter()
 					{
 						@Override
 						public void mouseClicked(MouseEvent arg0) {
+							
 							imgId--;
 							if(imgId<0)	
 							{
+								p=new PopUp("Informtion","info","This the last image", "", "");
+								p.setVisible(true);
 								imgId=files.length-1;
 							}
 							try {
 
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 							} catch (IOException e) {}
-
+							new Timer(1000, new ActionListener() {
+						        @Override
+						        public void actionPerformed(ActionEvent e) {
+						        	p.dispose();
+						        }
+						      }).start();
 						}
 					});
 					try {
@@ -152,12 +159,20 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							imgId++;
 							if(imgId>files.length-1)	
 							{
+								p=new PopUp("Informtion","info","This the first image", "", "");
+								p.setVisible(true);
 								imgId=0;
 							}
 							try {
 
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 							} catch (IOException e) {}
+							new Timer(1000, new ActionListener() {
+						        @Override
+						        public void actionPerformed(ActionEvent e) {
+						        	p.dispose();
+						        }
+						      }).start();
 						}
 					});
 					

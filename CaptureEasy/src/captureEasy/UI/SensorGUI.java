@@ -30,7 +30,8 @@ import javax.swing.JFrame;
 
 import java.awt.FlowLayout;
 import javax.swing.JPopupMenu;
-import java.awt.Component;
+import javax.swing.Timer;
+
 import java.awt.Toolkit;
 import java.awt.Font;
 
@@ -68,6 +69,7 @@ public class SensorGUI extends Library{
 	public JPanel sensor_panel;
 	public static boolean clickable=true;
 	private JPanel Main_panel = new JPanel();
+	public JPanel button_panel;
 
 
 
@@ -123,7 +125,7 @@ public class SensorGUI extends Library{
 		Main_panel.setBackground(new Color(0,0,0,0));
 
 
-		JPanel button_panel = new JPanel();
+		button_panel = new JPanel();
 		button_panel.setBorder(null);
 		button_panel.setBackground(Color.WHITE);
 		button_panel.setBounds(0, 115, 54, 438);
@@ -142,7 +144,7 @@ public class SensorGUI extends Library{
 						label_Menu.setEnabled(false);
 						Label_Pause.setIcon(new ImageIcon(ImageIO.read(playicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 						Label_Pause.setToolTipText("Click Here to Resume");
-						SharedRepository.loopControl=false;
+						SharedRepository.PauseThread=true;
 					}catch (IOException e3) {Label_Pause.setText("Play");logError(e3,"Exception in Icon loading: Image "+playicon.getPath()+" Not Available");}
 				}
 				else
@@ -151,7 +153,7 @@ public class SensorGUI extends Library{
 						label_Menu.setEnabled(true);
 						Label_Pause.setIcon(new ImageIcon(ImageIO.read(pauseicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 						Label_Pause.setToolTipText("Click Here to Pause");
-						SharedRepository.loopControl=true;
+						SharedRepository.PauseThread=false;
 						resetClipboard(getProperty(ClipBoardDataFilePath,"ClipTextData"));
 					}catch (IOException e3) {Label_Pause.setText("Pause"); logError(e3,"Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");}
 				}
@@ -194,6 +196,7 @@ public class SensorGUI extends Library{
 							}
 						}
 					});
+					try{frame.setAlwaysOnTop(true);}catch(Exception e5){}
 				}
 			}
 		});
@@ -230,6 +233,7 @@ public class SensorGUI extends Library{
 					frame.setAlwaysOnTop(false);
 					new ActionGUI(tabs);
 					ActionGUI.dialog.setVisible(true);
+
 				}
 			}
 		});
@@ -252,7 +256,15 @@ public class SensorGUI extends Library{
 				{
 					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
 					{
-						new PopUp("INFORMATION","Info","You have nothing to view !! ","Ok, I understood","").setVisible(true);
+						PopUp p=new PopUp("INFORMATION","Info","You have nothing to view !! ","Ok, I understood","");
+						p.setVisible(true);
+						new Timer(1000, new ActionListener() {
+					        @Override
+					        public void actionPerformed(ActionEvent e) {
+					        	p.dispose();
+					        }
+					      }).start();
+						try{frame.setAlwaysOnTop(true);}catch(Exception e5){}
 					}
 					else
 					{
@@ -261,7 +273,6 @@ public class SensorGUI extends Library{
 					tabs.add("Save");
 					tabs.add("Document");
 					tabs.add("Settings");
-					frame.setAlwaysOnTop(false);
 					new ActionGUI(tabs);	
 
 					ActionGUI.dialog.setVisible(true);
@@ -289,7 +300,15 @@ public class SensorGUI extends Library{
 				{
 					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
 					{
-						new PopUp("INFORMATION","Info","You have nothing to save !! ","Ok, I understood","").setVisible(true);
+						PopUp p= new PopUp("INFORMATION","Info","You have nothing to save !! ","Ok, I understood","");
+						p.setVisible(true);
+						new Timer(1000, new ActionListener() {
+					        @Override
+					        public void actionPerformed(ActionEvent e) {
+					        	p.dispose();
+					        }
+					      }).start();
+						try{frame.setAlwaysOnTop(true);}catch(Exception e5){}
 					}
 					else
 					{
@@ -298,12 +317,15 @@ public class SensorGUI extends Library{
 						tabs.add("View");
 						tabs.add("Document");
 						tabs.add("Settings");
-						frame.setAlwaysOnTop(false);
+						
 						ActionGUI act=new ActionGUI(tabs);
 						ActionGUI.dialog.setVisible(true);
 						act.savePanel.textField_Filename.requestFocusInWindow();
 						act.savePanel.rdbtnNewDoc.setEnabled(false);
 						act.savePanel.btnDone.setEnabled(false);
+						
+						
+						
 					}
 				}
 			}
@@ -321,13 +343,21 @@ public class SensorGUI extends Library{
 		button_panel.add(label_delete);
 		label_delete.setBackground(new Color(0,0,0,0));
 		label_delete.addMouseListener(new MouseAdapter() {
-			@Override
+			@Override				
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
 					if(IsEmpty(getProperty(TempFilePath,"TempPath")))
 					{
-						new PopUp("INFORMATION","Info","You have nothing to delete !! ","Ok, I understood","").setVisible(true);
+						PopUp p=new PopUp("INFORMATION","Info","You have nothing to delete !! ","Ok, I understood","");
+						p.setVisible(true);
+						new Timer(1000, new ActionListener() {
+					        @Override
+					        public void actionPerformed(ActionEvent e) {
+					        	p.dispose();
+					        }
+					      }).start();
+						try{frame.setAlwaysOnTop(true);}catch(Exception e5){}
 					}
 					else
 					{
@@ -368,7 +398,7 @@ public class SensorGUI extends Library{
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				//label_Count.setText(""+(++c)+"");
-				if(ActionGUI.leaveControl)
+				if(ActionGUI.leaveControl && !SharedRepository.PauseThread)
 				{
 					captureScreen();
 				}
@@ -412,17 +442,13 @@ public class SensorGUI extends Library{
 						label_Menu.setToolTipText("Click here to collapse");
 
 					}
-					popupMenu = new JPopupMenu();
-					popupMenu.setPopupSize(new Dimension(150, 60));
+					
 
-					//addPopup(new JLabel("hhhhiiiiiiiiiiiiiiiii"), popupMenu);
 				}
 
 			}
 		});
 		label_Menu.setToolTipText("Click here to expand");
-		button_panel.setVisible(false);
-		//////
 		try{
 			label_Menu.setIcon(new ImageIcon(ImageIO.read(menuicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 
@@ -442,7 +468,6 @@ public class SensorGUI extends Library{
 		label_Settings.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(ActionGUI.leaveControl);
 				if(ActionGUI.leaveControl)
 				{
 					List<String> tabs=new ArrayList<String>();
@@ -453,7 +478,7 @@ public class SensorGUI extends Library{
 						tabs.add("View");
 					}
 					tabs.add("Document");
-					frame.setAlwaysOnTop(false);
+					
 					new ActionGUI(tabs);
 					ActionGUI.dialog.setVisible(true);
 				}
@@ -467,27 +492,18 @@ public class SensorGUI extends Library{
 		} catch (IOException e) {
 			label_Settings.setText("Settings");logError(e,"Exception in Icon loading: Image "+settingicon.getPath()+" Not Available");
 		}
-
+		boolean bool=Boolean.valueOf(getProperty(PropertyFilePath,"SensorBTNPanelVisible"));
+		if(bool)
+		{
+			frame.setSize(new Dimension(54, 500));
+			Main_panel.setSize(new Dimension(54, 500));
+		}
+		else
+		{
+			frame.setSize(new Dimension(54, 110));
+			Main_panel.setSize(new Dimension(54, 110));
+		}
+		button_panel.setVisible(bool);	
 	}
 
-	@SuppressWarnings("unused")
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-
-
-	}
 }

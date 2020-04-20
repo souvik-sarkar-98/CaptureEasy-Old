@@ -35,6 +35,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import captureEasy.Resources.Library;
+import captureEasy.Resources.SharedRepository;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
@@ -56,14 +57,15 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 	public JTextField textField_Filename;
 	public JPanel panel_Save_Buttons;
 	public JButton exitbtn;
-	public static JPanel panel_Progress;
-	public JLabel label_1;
+	public static JLabel label_Status;
 	public JButton btnDone;
 	public static JProgressBar ProgressBar;
 	PopUp popup;
-	String existingfilepath;
+	public String existingfilepath;
 	String newFileName;
-
+	public JPanel panel_Progress;
+	public static JLabel lblUpdatingFiles;
+	private JPanel panel_Update;
 	public SavePanel(JTabbedPane TabbledPanel) {
 
 		SavePanel = new JPanel();
@@ -164,7 +166,9 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		rdbtnSavePDF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				panel_Input.setBounds(28, 162, 365, 70);
+				new PopUp("Information","info","Sorry !! This facility is currently  unavailable.","Ok, Fine","").setVisible(true);
+				rdbtnSavePDF.setSelected(false);
+				/*panel_Input.setBounds(28, 162, 365, 70);
 				ActionGUI.dialog.setAlwaysOnTop(true);
 				rdbtnNewDoc.setEnabled(true);
 				rdbtnExDoc.setEnabled(true);
@@ -184,7 +188,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				btnNewButton.setVisible(false);
 				chckbxOverwriteSelectedFile.setVisible(false);
 
-				btnDone.setEnabled(false);
+				btnDone.setEnabled(false);*/
 			}
 		});
 		rdbtnSavePDF.setPreferredSize(new Dimension(390, 25));
@@ -236,7 +240,6 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					btnNewButton.requestFocusInWindow();
 					ActionGUI.dialog.setAlwaysOnTop(false);
 					popup=new PopUp("ERROR","Error","Please choose a file!!","Ok, I understood","");
-					ActionGUI.dialog.setAlwaysOnTop(true);
 					lblEnterFilename.setVisible(false);
 					textField_Filename.setVisible(false);
 					textField_Filename.setText("");
@@ -249,10 +252,9 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					{
 						btnNewButton.setBackground(Color.YELLOW);
 						ActionGUI.dialog.setAlwaysOnTop(false);
-						popup=new PopUp("INFO","info","Selected file '"+file.getName()+"' "
+						popup=new PopUp("WARNING","warning","Selected file '"+file.getName()+"' "
 								+ "is open for editing. To overwrite please close the file and select again. Otherwise enter filename to create a copy.",
 								"Ok, I understood","");
-						ActionGUI.dialog.setAlwaysOnTop(true);
 						chckbxOverwriteSelectedFile.setVisible(true);
 						chckbxOverwriteSelectedFile.setSelected(false);
 						chckbxOverwriteSelectedFile.setEnabled(false);
@@ -356,33 +358,47 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		btnDone.setForeground(Color.BLACK);
 		panel_Save_Buttons.add(btnDone);
 		SaveScrollPane.add(panel_Save_Buttons);
-
 		btnDone.addActionListener(new ActionListener() {
-
-
 			public void actionPerformed(ActionEvent arg0) {
-				panel_Save_Buttons.setVisible(false);
 				SavePanel.setVisible(false);
-				label_1.setText("Please wait while we are creating your file.");
-				panel_Progress.setBounds(12, 12, 413, 293);
-				if(rdbtnNewDoc.isSelected())
-				{
-					createNewWord(getProperty(PropertyFilePath,"DocPath"),textField_Filename.getText());
-				}
-				else if(rdbtnExDoc.isSelected())
-				{
-					addToExistingWord(existingfilepath,textField_Filename.getText());
-				}
-				else if(rdbtnSavePDF.isSelected())
-				{
+				panel_Save_Buttons.setVisible(false);
+				panel_Progress.setVisible(true);
+				SaveScrollPane.add(panel_Progress);
+				new Thread(new Runnable(){
+
+			  		@Override
+			  		public void run() {
+			  			do
+			  			{
+			  				ProgressBar.setValue(SharedRepository.progress);
+			  				ProgressBar.repaint();
+			  			}while(SharedRepository.progress!=100);
+			  		}  
+			        }).start();;
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						if(rdbtnNewDoc.isSelected())
+						{
+							createNewWord(getProperty(PropertyFilePath,"DocPath"),textField_Filename.getText());
+						}
+						else if(rdbtnExDoc.isSelected())
+						{
+							addToExistingWord(existingfilepath,textField_Filename.getText());
+						}
+						else if(rdbtnSavePDF.isSelected())
+						{
+							
+						}
+						ActionGUI.dialog.dispose();
+						ActionGUI.leaveControl=true;
+						try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e5){}
+					}
 					
-				}
-				ActionGUI.dialog.dispose();
-				ActionGUI.leaveControl=true;
-				try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e5){}
-				//SavePanel.setVisible(true);
+				}).start();;
 			}
 		});
+		
 
 		btnDone.setFont(new Font("Tahoma", Font.BOLD, 16));
 
@@ -398,20 +414,38 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		});
 		panel_Save_Buttons.add(exitbtn);
 		exitbtn.setFont(new Font("Tahoma", Font.BOLD, 16));
-
+		
 		panel_Progress = new JPanel();
-		panel_Progress.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		panel_Progress.setBounds(12, 12, 413, 250);
-		SaveScrollPane.add(panel_Progress);
+		panel_Progress.setBorder(new MatteBorder(1, 1, 0, 1, (Color) new Color(0, 0, 0)));
+		panel_Progress.setBounds(12, 13, 413, 250);
 		panel_Progress.setLayout(null);
 
-		label_1 = new JLabel("");
-		label_1.setBounds(28, 20, 373, 25);
-		panel_Progress.add(label_1);
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JLabel lblProgressInformation = new JLabel("Progress Information");
+		lblProgressInformation.setBounds(110, 10, 194, 22);
+		lblProgressInformation.setFont(new Font("Tahoma", Font.BOLD, 18));
+		panel_Progress.add(lblProgressInformation);
 		
+		JLabel lblPleaseWaitWhile = new JLabel("Please wait while we are preparing your document ...");
+		lblPleaseWaitWhile.setBounds(18, 45, 377, 20);
+		lblPleaseWaitWhile.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panel_Progress.add(lblPleaseWaitWhile);
 		
-
+		//ProgressBar = new JProgressBar();
+		ProgressBar =new JCircularProgressBar().makeUI();
+		ProgressBar.setBounds(120, 75, 190, 170);
+		
+		panel_Update = new JPanel();
+		panel_Update.setBorder(new MatteBorder(0, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		panel_Update.setBounds(12, 259, 413, 46);
+		SaveScrollPane.add(panel_Update);
+		panel_Update.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		lblUpdatingFiles = new JLabel();
+		panel_Update.add(lblUpdatingFiles);
+		lblUpdatingFiles.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panel_Progress.add(ProgressBar);
+		
+		SaveScrollPane.add(panel_Progress);
 
 	}
 

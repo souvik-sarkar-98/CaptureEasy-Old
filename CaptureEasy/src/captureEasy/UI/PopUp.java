@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
+
 import java.awt.SystemColor;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
@@ -46,16 +48,22 @@ public class PopUp extends JDialog{
 	/**
 	 * Launch the application.
 	 */
+	static Timer timer=null;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
 				try {
-					PopUp window = new PopUp("ERROR","warning",this.getClass().getName()+"EXCEPTION ON SCREEN SHOYT ","ok","Cance;");
+					PopUp window = new PopUp("INFORMATION","info","Successfully Saved !!","Close","");
 					window.setVisible(true);
+					window.getRootPane().setDefaultButton(window.btnNewButton);
+					new Timer(3000, new ActionListener() {
+				        @Override
+				        public void actionPerformed(ActionEvent e) {
+				        	window.dispose();
+				        }
+				      }).start();
 					
-					//do{Thread.sleep(100);}while(!PopUp.control);
-					System.out.println(decision);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -72,6 +80,7 @@ public class PopUp extends JDialog{
 	{
 		control=false;
 		try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
+		try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
 		setResizable(false);
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		setUndecorated(true);
@@ -127,11 +136,11 @@ public class PopUp extends JDialog{
 		btnNewButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
-				btnNewButton.setSelected(true);
+				try{ActionGUI.dialog.setAlwaysOnTop(true);}catch(Exception e){}
 				control=true;
 				decision=true;
 				dispose();
+				try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
 			}
 		});
 		btnNewButton.setBackground(new Color(204, 204, 255));
@@ -152,10 +161,11 @@ public class PopUp extends JDialog{
 		btnNo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
+				try{ActionGUI.dialog.setAlwaysOnTop(true);}catch(Exception e){}
 				dispose();
 				control=true;
 				decision=false;
+				try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
 				
 			}
 		});
