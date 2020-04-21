@@ -315,14 +315,14 @@ public class SensorGUI extends Library{
 						List<String> tabs=new ArrayList<String>();
 						tabs.add("Save");
 						tabs.add("View");
-						tabs.add("Document");
+						//tabs.add("Document");
 						tabs.add("Settings");
 						
-						ActionGUI act=new ActionGUI(tabs);
+						new ActionGUI(tabs);
 						ActionGUI.dialog.setVisible(true);
-						act.savePanel.textField_Filename.requestFocusInWindow();
-						act.savePanel.rdbtnNewDoc.setEnabled(false);
-						act.savePanel.btnDone.setEnabled(false);
+						ActionGUI.savePanel.textField_Filename.requestFocusInWindow();
+						ActionGUI.savePanel.rdbtnNewDoc.setEnabled(false);
+						ActionGUI.savePanel.btnDone.setEnabled(false);
 						
 						
 						
@@ -472,12 +472,12 @@ public class SensorGUI extends Library{
 				{
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("Settings");
-					if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
+					/*if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
 					{
 						tabs.add("Save");
 						tabs.add("View");
 					}
-					tabs.add("Document");
+					tabs.add("Document");*/
 					
 					new ActionGUI(tabs);
 					ActionGUI.dialog.setVisible(true);

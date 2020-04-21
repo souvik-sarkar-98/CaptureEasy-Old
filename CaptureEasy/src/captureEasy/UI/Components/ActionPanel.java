@@ -20,15 +20,17 @@ import javax.swing.border.MatteBorder;
 
 import captureEasy.Resources.Library;
 import captureEasy.UI.ActionGUI;
+import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
 
 public class ActionPanel extends Library implements MouseListener,MouseMotionListener{
 	public JPanel ActionPanel;
-	JPanel panel_4;
+	public static JPanel panel_4;
 	JRadioButton rdbtnSavePreviousWork;
 	JRadioButton rdbtnContinuePreviousWork;
 	JRadioButton rdbtnDeletePreviousWork;
 	int saveTabIndex=0;
+	SettingsPanel settingsPanel=null;
 
 	public ActionPanel(JTabbedPane TabbledPanel) {
 		ActionPanel = new JPanel();
@@ -71,6 +73,11 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 				{
 					TabbledPanel.removeTabAt(saveTabIndex);
+					//if("false".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+					if(settingsPanel!=null)
+					{
+						TabbledPanel.removeTabAt(saveTabIndex);
+					}
 					saveTabIndex=0;
 				}
 				}catch(Exception e2){e2.printStackTrace();}
@@ -88,6 +95,11 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 				{
 					TabbledPanel.removeTabAt(saveTabIndex);
+					//if("false".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+					if(settingsPanel!=null)
+					{
+						TabbledPanel.removeTabAt(saveTabIndex);
+					}
 					saveTabIndex=0;
 				}
 				}catch(Exception e1){e1.printStackTrace();}
@@ -104,14 +116,21 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 			public void actionPerformed(ActionEvent arg0) {
 				if(rdbtnSavePreviousWork.isSelected())
 				{
+					
 					if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 					{
 						TabbledPanel.removeTabAt(saveTabIndex);
+						//if("false".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+						if(settingsPanel!=null)
+						{
+							TabbledPanel.removeTabAt(saveTabIndex);
+						}
+						
 						saveTabIndex=0;
 					}
 					SavePanel savePanel=new SavePanel(TabbledPanel);
+					ActionGUI.savePanel=savePanel;
 					TabbledPanel.addTab("Save", null,savePanel.SaveScrollPane, null);
-
 					TabbledPanel.setTitleAt(TabbledPanel.getTabCount()-1, ActionGUI.PRE_HTML + "Save" + ActionGUI.POST_HTML);
 					savePanel.textField_Filename.requestFocusInWindow();
 					savePanel.btnDone.setEnabled(false);
@@ -119,6 +138,27 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 					savePanel.rdbtnNewDoc.setEnabled(false);
 					saveTabIndex=TabbledPanel.getTabCount()-1;
 					TabbledPanel.setSelectedIndex(saveTabIndex);
+					if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+					{
+						savePanel.lblParFol.setVisible(true);
+						savePanel.textField_ParFol.setVisible(true);
+						savePanel.textField_Filename.setColumns(16);
+					}
+					else
+					{
+						savePanel.lblParFol.setVisible(false);
+						savePanel.textField_ParFol.setVisible(false);
+						savePanel.textField_Filename.setColumns(22);
+					}
+					{
+						ActionGUI.tagDrop=false;
+						settingsPanel=new SettingsPanel(TabbledPanel);
+						ActionGUI.settingsPanel=settingsPanel;
+						settingsPanel.CancelBtn.setEnabled(false);
+						TabbledPanel.addTab(ActionGUI.PRE_HTML + "Settings" + ActionGUI.POST_HTML, null,settingsPanel.SettingsPane, null);
+						ActionGUI.redirectingTabID=2;
+						//new PopUp("Information","info","Please go to Settings tab for changeing document arrangement\n Please note that this change will be temporary","Ok, I understood","" ).setVisible(true);;
+					}
 
 				}
 				else if(rdbtnContinuePreviousWork.isSelected())
@@ -126,6 +166,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 					ActionGUI.dialog.dispose();
 					ActionGUI.leaveControl=true;
 					try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
+					panel_4=null;
 				}
 				else
 				{
@@ -134,6 +175,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 					ActionGUI.dialog.dispose();
 					ActionGUI.leaveControl=true;
 					try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
+					panel_4=null;
 				}
 			}
 		});

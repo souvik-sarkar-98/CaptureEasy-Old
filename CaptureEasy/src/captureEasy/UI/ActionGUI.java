@@ -8,7 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,13 +44,14 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			+ "width: 70px\">";
 	public static final String POST_HTML = "</p></html>";
 	public ActionPanel actionPanel;
-	public SettingsPanel settingsPanel;
+	public static SettingsPanel settingsPanel;
 	public ManageDocumentPanel documentPanel;
 	public ViewPanel viewPanel;
-	public SavePanel savePanel;
+	public static SavePanel savePanel;
 	List<String> tabs;
 	public static int xDialog,yDialog, xyDialog,xxDialog;
 	public static boolean leaveControl=true,tagDrop=true;
+	public static int redirectingTabID=0;
 	
 	
 	@SuppressWarnings({ })
@@ -95,9 +100,27 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 				if(tabs.get(i).equalsIgnoreCase("Save"))
 				{
 					savePanel=new SavePanel(TabbledPanel);
+					if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+					{
+						savePanel.lblParFol.setVisible(true);
+						savePanel.textField_ParFol.setVisible(true);
+						savePanel.textField_Filename.setColumns(16);
+					}
+					else
+					{
+						savePanel.lblParFol.setVisible(false);
+						savePanel.textField_ParFol.setVisible(false);
+						savePanel.textField_Filename.setColumns(22);
+					}
 					TabbledPanel.addTab("Save", null,savePanel.SaveScrollPane, null);
 					TabbledPanel.setTitleAt(i, PRE_HTML + "Save" + POST_HTML);
-					//TabbledPanel.setTabComponentAt(i,) ;
+					if(i!=0)
+						savePanel.exitbtn.setEnabled(false);
+					if(!savePanel.textField_Filename.getText().replaceAll("\\s", "").equals(""))
+					{
+						savePanel.btnDone.setEnabled(true);
+					}
+						
 				}
 				else if(tabs.get(i).equalsIgnoreCase("View"))
 				{
@@ -116,6 +139,8 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 					settingsPanel=new SettingsPanel(TabbledPanel);
 					TabbledPanel.addTab("Settings", null, settingsPanel.SettingsPane, null);
 					TabbledPanel.setTitleAt(i, PRE_HTML + "Settings" + POST_HTML);
+					if(i!=0)
+						settingsPanel.CancelBtn.setEnabled(false);
 				}
 				else
 				{
@@ -165,11 +190,30 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			savePanel.rdbtnNewDoc.setEnabled(false);
 			savePanel.btnDone.setEnabled(false);
 			dialog.getRootPane().setDefaultButton(savePanel.btnDone);
+			/*if(!savePanel.exitbtn.isEnabled())
+			{
+				if(settingsPanel.rdbtnDate.isSelected())
+				{
+					savePanel.lblParFol.setVisible(false);
+					savePanel.textField_ParFol.setVisible(false);
+				}
+			}*/
 		}catch(Exception e){}
+			
 		}
 		else if(tabName.contains("View"))
 		{
-
+			ViewPanel.files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
+			System.out.println(timeStamp());
+			sortFiles(ViewPanel.files);
+			System.out.println(timeStamp());
+			if(ViewPanel.ImageLabel.getToolTipText()==null)
+				ViewPanel.imgId=ViewPanel.files.length-1;
+			System.out.println(ViewPanel.imgId);
+			try {
+				ViewPanel.ImageLabel.setToolTipText("<html>Filename : "+ViewPanel.files[ViewPanel.imgId].getName()+"<br><br>Click image to zoom</html>");
+				ViewPanel.ImageLabel.setIcon(new ImageIcon(ImageIO.read(ViewPanel.files[ViewPanel.imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
+			} catch (IOException e) {}
 		}
 		else if(tabName.contains("Manage"))
 		{
@@ -193,14 +237,24 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			}catch(Exception e){}
 		}
 		else if(tabName.contains("Settings"))
-		{
-			tagDrop=false;
+		{				
+			ActionGUI.tagDrop=false;
 			String path=getProperty(PropertyFilePath,"DocPath");
 			settingsPanel.SettingsPane_DocFolderPanel_textField_DocDestFolder.setText(path);
 			if(!"".equals(path))
 			{
-				settingsPanel.rdbtnDate.setSelected(Boolean.valueOf(getProperty(PropertyFilePath,"ArrangeSSDatewise")));
-				settingsPanel.comboBox_ImageFormat.setSelectedItem(getProperty(PropertyFilePath,"ImageFormat"));
+				settingsPanel.chckbxShowFilderNameField.setSelected(Boolean.valueOf(getProperty(PropertyFilePath,"showFolderNameField")));
+				if(Boolean.valueOf(getProperty(PropertyFilePath,"showFolderNameField")))
+				{
+					settingsPanel.chckbxSetFoldernameMandatory.setVisible(true);
+					settingsPanel.chckbxSetFoldernameMandatory.setSelected(Boolean.valueOf(getProperty(PropertyFilePath,"setFolderNameMandatory")));
+				}
+				if(!settingsPanel.chckbxShowFilderNameField.isSelected())
+				{
+					settingsPanel.chckbxSetFoldernameMandatory.setVisible(false);
+					settingsPanel.chckbxSetFoldernameMandatory.setSelected(false);
+				}
+					settingsPanel.comboBox_ImageFormat.setSelectedItem(getProperty(PropertyFilePath,"ImageFormat"));
 				SettingsPanel.lblLocationx.setText("Location : ( "+getProperty(PropertyFilePath,"Xlocation")+" , "+getProperty(PropertyFilePath,"Ylocation")+" )");
 			}
 			settingsPanel.SettingsPane_Recordpanel_RecordFlag.setSelected(Boolean.valueOf(getProperty(PropertyFilePath,"ScreenRecording")));

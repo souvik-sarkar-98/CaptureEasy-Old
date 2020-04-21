@@ -37,7 +37,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 	JButton btnGo;
 	public static List<String> monthList=new ArrayList<String>();
 	public static List<String> dayList=new ArrayList<String>();
-	//public static List<
+	public static ArrayList<ArrayList<File>> Filelist=new ArrayList<ArrayList<File>>();
 	public static JComboBox<Object> month_1;
 	public static JComboBox<Object> day;
 
@@ -115,6 +115,18 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			JPanel panel_3 = new JPanel();
 			scrollPane.setRowHeaderView(panel_3);
 			panel_3.setLayout(null);
+			
+			JLabel lblSelectMonth = new JLabel("                                  Click GO to visit Documents ");
+			scrollPane.setViewportView(lblSelectMonth);
+			
+			JButton btnExit = new JButton("Exit");
+			btnExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					ActionGUI.dialog.dispose();
+					ActionGUI.leaveControl=true;
+				}
+			});
+			scrollPane.setColumnHeaderView(btnExit);
 
 			btnGo = new JButton("GO");
 			btnGo.addActionListener(new ActionListener() {
@@ -187,5 +199,4 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 		// TODO Auto-generated method stub
 		
 	}
-	
 }

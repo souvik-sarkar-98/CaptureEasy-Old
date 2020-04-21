@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class SharedRepository{
 
-	public static String PropertyFilePath=System.getProperty("user.dir")+"/CaptureEasy/Properties/Settings.properties";
+	public static String PropertyFilePath=System.getProperty("user.dir")+"/CaptureEasy/Properties/AppProperty.properties";
 	public static String TempFilePath=System.getProperty("user.dir")+"/CaptureEasy/Properties/Tempfolder.properties";
 	public static String ClipBoardDataFilePath=System.getProperty("user.dir")+"/CaptureEasy/Properties/ClipboardData.properties";
 

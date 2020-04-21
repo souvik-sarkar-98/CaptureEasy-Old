@@ -28,19 +28,20 @@ public class LaunchApplication extends Library{
 
 		if(!new File(createFolder(PropertyFilePath)).exists())
 		{
+			
 			getProperty(TempFilePath,"TempPath");
 			updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 			List<String> tabs=new ArrayList<String>();
 			tabs.add("Settings");
-			ActionGUI act=new ActionGUI(tabs);
+			new ActionGUI(tabs);
 			ActionGUI.dialog.setVisible(true);
-			act.settingsPanel.chckbxUpdateDocumentDestination.setText("Set document destination folder");
-			act.settingsPanel.btnUpdateFrameLocation.setText("Set frame location");
-			act.settingsPanel.chckbxUpdateDocumentDestination.setSelected(true);
-			act.settingsPanel.SettingsPane_DocFolderPanel_textField_DocDestFolder.setEnabled(true);
-			act.settingsPanel.SettingsPane_DocFolderPanel_Chooser.setEnabled(true);
-			act.settingsPanel.comboBox_CaptureKey.setSelectedIndex(0);
-			act.settingsPanel.comboBox_ImageFormat.setSelectedIndex(0);
+			ActionGUI.settingsPanel.DocumentDestination.setText("Set document destination folder");
+			ActionGUI.settingsPanel.btnUpdateFrameLocation.setText("Set frame location");
+			ActionGUI.settingsPanel.SettingsPane_DocFolderPanel_textField_DocDestFolder.setEnabled(true);
+			ActionGUI.settingsPanel.SettingsPane_DocFolderPanel_Chooser.setEnabled(true);
+			ActionGUI.tagDrop=false;
+			ActionGUI.settingsPanel.comboBox_CaptureKey.setSelectedIndex(0);
+			ActionGUI.settingsPanel.comboBox_ImageFormat.setSelectedIndex(0);
 					
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 		}
@@ -49,10 +50,14 @@ public class LaunchApplication extends Library{
 			List<String> tabs=new ArrayList<String>();
 			tabs.add("Action");
 			tabs.add("View");
-			new ActionGUI(tabs);			
+			
+			ActionGUI act=new ActionGUI(tabs);			
 			ActionGUI.dialog.setVisible(true);
+			act.viewPanel.lblExit.setEnabled(false);
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 			TempNeeded=false;
+			
+			
 		}
 
 

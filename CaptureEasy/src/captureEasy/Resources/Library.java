@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -130,20 +131,32 @@ public class Library extends SharedRepository
 	 * @Type: File Processing Method
 	 * @name= subFolders(String basepath)
 	 */
-	public static String subFolders(String basepath)
+	public static String subFolders(String basepath,String folderName)
 	{
-		if(getProperty(PropertyFilePath,"ArrangeSSDatewise").equalsIgnoreCase("true"))
+		String[] monthName = {"January", "February",
+				"March", "April", "May", "June", "July",
+				"August", "September", "October", "November",
+		"December"};
+		Calendar cal = Calendar.getInstance();
+		String month = monthName[cal.get(Calendar.MONTH)];
+		if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 		{
-			String[] monthName = {"January", "February",
-					"March", "April", "May", "June", "July",
-					"August", "September", "October", "November",
-			"December"};
-			Calendar cal = Calendar.getInstance();
-			String month = monthName[cal.get(Calendar.MONTH)];
-			return createFolder(createFolder(basepath+"\\"+month+" "+cal.get(Calendar.YEAR))+"\\"+month+" "+cal.get(Calendar.DAY_OF_MONTH));
+			if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"setFolderNameMandatory")))
+			{
+				return createFolder(basepath+"\\"+folderName);
+			}
+			else
+			{
+				if(folderName.replaceAll("\\s", "").equals(""))
+					return createFolder(createFolder(basepath+"\\"+month+" "+cal.get(Calendar.YEAR))+"\\"+month+" "+cal.get(Calendar.DAY_OF_MONTH)); 
+				else
+					return createFolder(basepath+"\\"+folderName);
+			}
 		}
 		else
-			return basepath;
+		{
+			return createFolder(createFolder(basepath+"\\"+month+" "+cal.get(Calendar.YEAR))+"\\"+month+" "+cal.get(Calendar.DAY_OF_MONTH));
+		}
 	}
 
 	/**
@@ -227,7 +240,7 @@ public class Library extends SharedRepository
 		String Imageformat=getProperty(PropertyFilePath,"ImageFormat").toLowerCase();
 		if(Imageformat==null)
 		{
-
+			
 		}
 		SensorGUI.frame.setLocation(10000,10000);
 		try {
@@ -255,27 +268,7 @@ public class Library extends SharedRepository
 
 		File[] files = new File(Temppath).listFiles();
 		SavePanel.lblUpdatingFiles.setText("Sorting files ...");
-		Arrays.sort(files, new Comparator<File>() {
-			@Override
-			public int compare(File o1, File o2) {
-				SavePanel.lblUpdatingFiles.setText("Comparing: "+o1.getName()+"  "+o2.getName());
-				int n1 = extractNumber(o1.getName());
-				int n2 = extractNumber(o2.getName());
-				return n1 - n2;
-			}
-
-			private int extractNumber(String name) {
-				int i = 0;
-				try {
-					int e = name.lastIndexOf('.');
-					String number = name.substring(0, e);
-					i = Integer.parseInt(number);
-				} catch(Exception e) {
-					i = 0; 
-				}
-				return i;
-			}
-		});
+		sortFiles(files);
 
 		for(int i=0;i<files.length;i++)
 		{
@@ -296,11 +289,36 @@ public class Library extends SharedRepository
 
 		}
 	}
+	
+		
+
+public static void sortFiles(File[] files) {
+	Arrays.sort(files, new Comparator<File>() {
+		@Override
+		public int compare(File o1, File o2) {
+			int n1 = extractNumber(o1.getName());
+			int n2 = extractNumber(o2.getName());
+			return n1 - n2;
+		}
+
+		private int extractNumber(String name) {
+			int i = 0;
+			try {
+				int e = name.lastIndexOf('.');
+				String number = name.substring(0, e);
+				i = Integer.parseInt(number);
+			} catch(Exception e) {
+				i = 0; 
+			}
+			return i;
+		}
+	});
+}
 	/**
 	 * @Type: Word Processing Method
 	 * @name= createNewWord(String DocumentPath,String testName)
 	 */
-	public static void createNewWord(String DocumentPath,String testName)
+	public static void createNewWord(String DocumentPath,String testName,String foldername)
 	{
 		try
 		{
@@ -309,7 +327,7 @@ public class Library extends SharedRepository
 			XWPFRun createNewWordRun=createNewWordDocument.createParagraph().createRun();
 			LoadImages(getProperty(TempFilePath,"TempPath"),createNewWordRun,testName+".docx");
 			SavePanel.lblUpdatingFiles.setText("Saving "+testName+".docx");
-			FileOutputStream createNewWordOut=new FileOutputStream(subFolders(DocumentPath)+"\\"+testName+".docx");
+			FileOutputStream createNewWordOut=new FileOutputStream(subFolders(DocumentPath,foldername)+"\\"+testName+".docx");
 			createNewWordDocument.write(createNewWordOut);
 			createNewWordOut.flush();
 			createNewWordOut.close();
@@ -398,6 +416,12 @@ public class Library extends SharedRepository
 				}
 			}
 		}).start();	
+	}
+	
+	public static ArrayList<ArrayList<ArrayList<File>>> getFileData(String basePath)
+	{
+		return null;
+		
 	}
 }
 

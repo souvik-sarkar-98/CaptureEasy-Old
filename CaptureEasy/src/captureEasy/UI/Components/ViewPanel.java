@@ -17,7 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.Timer;
 import javax.swing.border.MatteBorder;
 
 import captureEasy.Resources.Library;
@@ -27,20 +26,20 @@ import captureEasy.UI.PopUp;
 public class ViewPanel extends Library implements MouseListener,MouseMotionListener{
 	public JPanel ViewScrollPane;
 	JPanel panel_Image;
-	JLabel ImageLabel;
+	public static JLabel ImageLabel;
 	JLabel label_Prev;
 	JLabel label_VisitFolder;
 	JLabel Label_FullView;
 	JLabel label_Next;
 	JLabel label_Delete;
 	JPanel panel_Button;
-	File[] files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
-	int imgId;
+	public static File[] files;
+	public static int imgId;
 	PopUp p = null;
+	public JLabel lblExit;
 	public ViewPanel(JTabbedPane TabbledPanel)
 	{
-		files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
-		imgId=files.length-1;
+		
 		ViewScrollPane = new JPanel();
 		ViewScrollPane.setSize(new Dimension(434, 319));
 		ViewScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
@@ -58,26 +57,14 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 				ViewScrollPane.add(panel_Image);
 				panel_Image.setLayout(null);
 				{
-					ImageLabel = new JLabel("                                                     Nothing to preview");
-					ImageLabel.setToolTipText("Double click to open in windows viewer");
+					ImageLabel = new JLabel();
 					ImageLabel.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							if(e.getClickCount()==2)
-							{
-								try {
-									Desktop.getDesktop().open(files[imgId]);
-								} catch (IOException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
+							//////
 						}
 					});
-					try {
-
-						ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
-					} catch (IOException e) {}
+					ViewPanel.ImageLabel.setToolTipText(null);
 					ImageLabel.setSize(new Dimension(400, 250));
 					ImageLabel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 					ImageLabel.setBounds(0, 0, 410, 250);
@@ -106,23 +93,17 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							imgId--;
 							if(imgId<0)	
 							{
-								/*p=new PopUp("Informtion","info","This the last image", "", "");
-								p.setVisible(true);*/
 								imgId=files.length-1;
 							}
 							try {
-
+								ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 							} catch (IOException e) {}
-							new Timer(1000, new ActionListener() {
-						        @Override
-						        public void actionPerformed(ActionEvent e) {
-						        	p.dispose();
-						        }
-						      }).start();
+							
 						}
 					});
 					try {
+						
 						label_Prev.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\left-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
 					} catch (IOException e) {
 
@@ -132,7 +113,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					Label_FullView = new JLabel(" ");
 
 					Label_FullView.setSize(new Dimension(25, 25));
-					Label_FullView.setToolTipText("View Fullscreen");
+					Label_FullView.setToolTipText("View fullscreen with image viewer");
 					Label_FullView.setBounds(195, 5, 33, 25);
 					panel_Button.add(Label_FullView);
 					Label_FullView.addMouseListener(new MouseAdapter()
@@ -140,7 +121,13 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 						@Override
 						public void mouseClicked(MouseEvent arg0) {
 							try {
+								if(ActionPanel.panel_4==null)
+								{
+									ActionGUI.dialog.dispose();
+									ActionGUI.leaveControl=true;
+								}
 								Desktop.getDesktop().open(files[imgId]);
+								
 							} catch (IOException e1) {}			
 						}
 					});
@@ -159,20 +146,13 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							imgId++;
 							if(imgId>files.length-1)	
 							{
-								/*p=new PopUp("Informtion","info","This the first image", "", "");
-								p.setVisible(true);*/
 								imgId=0;
 							}
 							try {
-
+								ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 							} catch (IOException e) {}
-							new Timer(1000, new ActionListener() {
-						        @Override
-						        public void actionPerformed(ActionEvent e) {
-						        	p.dispose();
-						        }
-						      }).start();
+							
 						}
 					});
 					
@@ -242,6 +222,28 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					label_VisitFolder.setBounds(12, 5, 25, 25);
 					panel_Button.add(label_VisitFolder);
 				}
+				
+				lblExit = new JLabel("exit");
+				//lblExit.setBounds(308, 9, 20, 20);
+				lblExit.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						if(lblExit.isEnabled())
+						{
+							ActionGUI.dialog.dispose();
+							ActionGUI.leaveControl=true;
+						}
+					}
+				});
+				lblExit.setSize(new Dimension(20, 20));
+
+				lblExit.setToolTipText("Exit");
+				try {
+					lblExit.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\Btn_exit.png")).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH)));
+				} catch (IOException e) {
+				}
+				lblExit.setBounds(340, 7, 20, 20);
+				panel_Button.add(lblExit);
 			}
 		}
 	}
@@ -282,5 +284,4 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 		// TODO Auto-generated method stub
 
 	}
-
 }
