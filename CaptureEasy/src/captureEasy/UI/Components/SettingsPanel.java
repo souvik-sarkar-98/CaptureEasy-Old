@@ -196,7 +196,8 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 			}
 			
 			chckbxSetFoldernameMandatory = new JCheckBox("Set as mandatory field");
-			chckbxSetFoldernameMandatory.setBounds(229, 78, 173, 25);
+			chckbxSetFoldernameMandatory.setFont(new Font("Tahoma", Font.BOLD, 13));
+			chckbxSetFoldernameMandatory.setBounds(229, 78, 177, 25);
 			SettingsPane_DocFolderPanel.add(chckbxSetFoldernameMandatory);
 			chckbxSetFoldernameMandatory.setSelected(false);
 			chckbxSetFoldernameMandatory.setVisible(false);
@@ -463,10 +464,16 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 											ActionGUI.savePanel.textField_ParFol.setVisible(false);
 											ActionGUI.savePanel.textField_Filename.setColumns(22);
 										}
+										if(ActionPanel.panel_4!=null)
+											ActionGUI.redirectingTabID=2;
+										else
+											ActionGUI.redirectingTabID=0;
+
 										}catch(Exception e58){}
 										
 										TabbledPanel.setSelectedIndex(ActionGUI.redirectingTabID);
-										if(!ActionGUI.savePanel.textField_Filename.getText().replaceAll("\\s", "").equals(""))
+										
+										if(ActionGUI.savePanel!=null && !ActionGUI.savePanel.textField_Filename.getText().replaceAll("\\s", "").equals(""))
 										{
 											ActionGUI.savePanel.btnDone.setEnabled(true);
 											ActionGUI.savePanel.textField_ParFol.setBackground(Color.WHITE);

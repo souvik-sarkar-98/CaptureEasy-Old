@@ -315,7 +315,7 @@ public class SensorGUI extends Library{
 						List<String> tabs=new ArrayList<String>();
 						tabs.add("Save");
 						tabs.add("View");
-						//tabs.add("Document");
+						tabs.add("Document");
 						tabs.add("Settings");
 						
 						new ActionGUI(tabs);

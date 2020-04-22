@@ -127,12 +127,16 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 					viewPanel=new ViewPanel(TabbledPanel);
 					TabbledPanel.addTab("ViewImages", null, viewPanel.ViewScrollPane, null);
 					TabbledPanel.setTitleAt(i, PRE_HTML + "View\nImages" + POST_HTML);
+					if(i!=0)
+						viewPanel.lblExit.setEnabled(false);
 				}
 				else if(tabs.get(i).equalsIgnoreCase("Document"))
 				{	
 					documentPanel=new ManageDocumentPanel(TabbledPanel);
 					TabbledPanel.addTab("ManageDocument", null, documentPanel.DocumentScrollPane, null);
 					TabbledPanel.setTitleAt(i, PRE_HTML + "Manage\nDocument" + POST_HTML);
+					if(i!=0)
+						documentPanel.lblCross.setEnabled(false);
 				}
 				else if(tabs.get(i).equalsIgnoreCase("Settings"))
 				{
@@ -210,10 +214,13 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			if(ViewPanel.ImageLabel.getToolTipText()==null)
 				ViewPanel.imgId=ViewPanel.files.length-1;
 			System.out.println(ViewPanel.imgId);
+			System.out.println();
 			try {
 				ViewPanel.ImageLabel.setToolTipText("<html>Filename : "+ViewPanel.files[ViewPanel.imgId].getName()+"<br><br>Click image to zoom</html>");
 				ViewPanel.ImageLabel.setIcon(new ImageIcon(ImageIO.read(ViewPanel.files[ViewPanel.imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
-			} catch (IOException e) {}
+			} catch (IOException e) {
+				System.out.println("HHHiioi");
+			}
 		}
 		else if(tabName.contains("Manage"))
 		{

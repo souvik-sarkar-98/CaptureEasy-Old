@@ -234,7 +234,7 @@ public class PopUp extends JDialog{
 		panel_7.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		txtrExceptionOccuredPlease = new JTextArea();
-		txtrExceptionOccuredPlease.setToolTipText(text);
+		
 		txtrExceptionOccuredPlease.setRows(5);
 		if(PopUpType.equalsIgnoreCase("Error"))
 		{
@@ -252,13 +252,37 @@ public class PopUp extends JDialog{
 		txtrExceptionOccuredPlease.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtrExceptionOccuredPlease.setColumns(18);
 		int len=text.length();
-		
+		txtrExceptionOccuredPlease.setToolTipText(text);
+		try{
+		String toolText="<html>";
+		if(len>50)
+		{
+			int i=0;
+			for(;i<(len/50);i++)
+				toolText=toolText+text.substring(i*50, 50*(i+1))+"<br>";
+			toolText=toolText+text.substring(i*50)+"</html>";
+			txtrExceptionOccuredPlease.setToolTipText(toolText);
+		}
+		}catch(Exception e){}
+		try{
+		String tt="<html>";
+		for(int i=0;i<len;i++)
+		{
+			tt=tt+text.charAt(i);
+			if(text.charAt(i)=='.')
+				tt=tt+"<br>";
+		}
+		txtrExceptionOccuredPlease.setToolTipText(tt+"</html>");
+	}catch(Exception e){}
 		if(len>120)
 		{
 			text=text.substring(0, 120)+" "
 					+ "...";
 		}
 		txtrExceptionOccuredPlease.setText(text);
+		
+		;
+
 		panel_7.add(txtrExceptionOccuredPlease);
 		
 		//revalidate();

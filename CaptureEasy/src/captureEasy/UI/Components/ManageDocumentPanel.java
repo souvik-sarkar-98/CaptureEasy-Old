@@ -60,6 +60,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import java.awt.event.MouseAdapter;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JComboBox;
 
 public class ManageDocumentPanel extends Library implements MouseListener,MouseMotionListener,TreeSelectionListener{
 
@@ -108,6 +111,13 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 	public DefaultTreeModel treeModel;
 	public JTree tree;
 	public JPanel panel_View;
+	public JTextField textField;
+	public JLabel lblCross;
+	public JLabel label_SearchBtn;
+	public JLabel label_delete;
+	public JLabel label_rename;
+	public JLabel label_createFolder;
+	public JLabel label_Export;
 	public ManageDocumentPanel(JTabbedPane TabbledPanel)
 	{
 		try {
@@ -125,31 +135,109 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 
 			JPanel panel_Selection = new JPanel();
 			panel_Selection.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-			panel_Selection.setBounds(10, 10, 372, 40);
+			panel_Selection.setBounds(10, 10, 415, 40);
 			DocumentScrollPane.add(panel_Selection);
 			panel_Selection.setLayout(null);
-
-			JRadioButton rdbtnViewDocuments = new JRadioButton("View Documents");
-			rdbtnViewDocuments.setSelected(true);
-			rdbtnViewDocuments.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					rdbtnViewDocuments.setSelected(true);// temporary
-				}
-			});
-			rdbtnViewDocuments.setFont(new Font("Tahoma", Font.BOLD, 16));
-			rdbtnViewDocuments.setBounds(15, 8, 163, 25);
-			panel_Selection.add(rdbtnViewDocuments);
-
-			JRadioButton rdbtnNewRadioButton = new JRadioButton("Search Documents");
-			rdbtnNewRadioButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					new PopUp("Information","info","Sorry !! This facility is currently  unavailable.","Ok, Fine","").setVisible(true);
-					rdbtnNewRadioButton.setSelected(false);
-				}
-			});
-			rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
-			rdbtnNewRadioButton.setBounds(185, 8, 180, 25);
-			panel_Selection.add(rdbtnNewRadioButton);
+			
+			lblCross = new JLabel("");
+			lblCross.setBounds(385, 8, 20, 20);
+			panel_Selection.add(lblCross);
+			
+						lblCross.setToolTipText("Close window");
+						try {
+							lblCross.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\Btn_exit.png")).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH)));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						lblCross.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent arg0) {
+								if(lblCross.isEnabled())
+								{
+									ActionGUI.dialog.dispose();
+									ActionGUI.leaveControl=true;
+								}
+							}
+						});
+						
+						label_SearchBtn = new JLabel("");
+						label_SearchBtn.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent arg0) {
+							}
+						});
+						label_SearchBtn.setToolTipText("Search ");
+						label_SearchBtn.setBounds(340, 8, 25, 25);
+						panel_Selection.add(label_SearchBtn);
+						try {
+							label_SearchBtn.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\search.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						textField = new JTextField();
+						textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+						textField.setToolTipText("Enter search key");
+						textField.setBounds(235, 7, 100, 22);
+						panel_Selection.add(textField);
+						textField.setColumns(10);
+						
+						label_delete = new JLabel("");
+						label_delete.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+							}
+						});
+						label_delete.setToolTipText("Delete selected file");
+						label_delete.setBounds(195, 7, 25, 25);
+						panel_Selection.add(label_delete);
+						try {
+							label_delete.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\delete.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						label_rename = new JLabel("");
+						label_rename.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+							}
+						});
+						label_rename.setToolTipText("Rename selected file");
+						label_rename.setBounds(160, 7, 25, 25);
+						try {
+							label_rename.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\rename.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						panel_Selection.add(label_rename);
+						
+						label_createFolder = new JLabel("");
+						label_createFolder.setToolTipText("Create a new folder");
+						label_createFolder.setBounds(125, 7, 25, 25);
+						panel_Selection.add(label_createFolder);
+						try {
+							label_createFolder.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\createFolder.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+							
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						label_Export = new JLabel("");
+						label_Export.setToolTipText("Export selected files to folder");
+						label_Export.setBounds(90, 7, 25, 25);
+						panel_Selection.add(label_Export);
+						try {
+							label_Export.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\export.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+							
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 			panel_View = new JPanel();
 			panel_View.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
@@ -230,33 +318,6 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			JScrollPane ScrollPane_Table = new JScrollPane(table);
 			splitPane_View.setRightComponent(ScrollPane_Table);
 			
-			JPanel panel_Exit = new JPanel();
-			panel_Exit.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-			panel_Exit.setBounds(390, 10, 35, 40);
-			DocumentScrollPane.add(panel_Exit);
-			panel_Exit.setLayout(null);
-			
-			JLabel lblCross = new JLabel("");
-			lblCross.setLocation(8, 10);
-			panel_Exit.add(lblCross);
-			lblCross.setSize(new Dimension(20, 20));
-
-			lblCross.setToolTipText("Exit");
-			try {
-				lblCross.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\Btn_exit.png")).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH)));
-			} catch (IOException e) {
-				
-			}
-			lblCross.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					if(lblCross.isEnabled())
-					{
-						ActionGUI.dialog.dispose();
-						ActionGUI.leaveControl=true;
-					}
-				}
-			});
 		//	Dimension d = ScrollPane_Table.getPreferredSize();
 			tree.addTreeSelectionListener(treeSelectionListener);
 			tree.setCellRenderer(new FileTreeCellRenderer());
@@ -478,7 +539,7 @@ class FileTableModel extends AbstractTableModel {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 	public File[] files;
     public FileSystemView fileSystemView = FileSystemView.getFileSystemView();
     public String[] columns = {
