@@ -450,6 +450,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 									}
 									else
 									{
+										try{
 										if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 										{
 											ActionGUI.savePanel.lblParFol.setVisible(true);
@@ -462,6 +463,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 											ActionGUI.savePanel.textField_ParFol.setVisible(false);
 											ActionGUI.savePanel.textField_Filename.setColumns(22);
 										}
+										}catch(Exception e58){}
 										
 										TabbledPanel.setSelectedIndex(ActionGUI.redirectingTabID);
 										if(!ActionGUI.savePanel.textField_Filename.getText().replaceAll("\\s", "").equals(""))

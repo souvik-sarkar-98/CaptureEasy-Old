@@ -217,7 +217,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 		}
 		else if(tabName.contains("Manage"))
 		{
-			try{
+			/*try{
 				File[] files=new File(getProperty(PropertyFilePath,"DocPath")).listFiles();
 				for(File f:files)
 				{
@@ -234,7 +234,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 						ManageDocumentPanel.dayList.add(f.getName());
 					}
 				}
-			}catch(Exception e){}
+			}catch(Exception e){}*/
 		}
 		else if(tabName.contains("Settings"))
 		{				
