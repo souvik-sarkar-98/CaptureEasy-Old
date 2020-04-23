@@ -59,6 +59,7 @@ public class SensorGUI extends Library{
 	public JLabel label_Save;
 	public JLabel label_View;
 	ActionGUI act;
+	public static PopUp window;
 	public JLabel label_Settings;
 
 
@@ -222,6 +223,16 @@ public class SensorGUI extends Library{
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							window = new PopUp("INFORMATION","info","\n\n                  Loading ...","","");
+							window.setVisible(true);
+							window.lblIcon.setBounds(20, 45,50,50);
+						}
+						
+					}).start();;
+					
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("Document");
 					if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
@@ -232,8 +243,8 @@ public class SensorGUI extends Library{
 					tabs.add("Settings");
 					frame.setAlwaysOnTop(false);
 					new ActionGUI(tabs);
+					
 					ActionGUI.dialog.setVisible(true);
-
 				}
 			}
 		});
@@ -268,14 +279,25 @@ public class SensorGUI extends Library{
 					}
 					else
 					{
+						new Thread(new Runnable(){
+							@Override
+							public void run() {
+								window = new PopUp("INFORMATION","info","\n\n                  Loading ...","","");
+								window.setVisible(true);
+								window.lblIcon.setBounds(20, 45,50,50);
+							}
+							
+						}).start();;
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("View");
 					tabs.add("Save");
 					tabs.add("Document");
 					tabs.add("Settings");
-					new ActionGUI(tabs);	
+					new ActionGUI(tabs);
+					
 
 					ActionGUI.dialog.setVisible(true);
+					
 					}
 				}
 			}
@@ -312,6 +334,15 @@ public class SensorGUI extends Library{
 					}
 					else
 					{
+						new Thread(new Runnable(){
+							@Override
+							public void run() {
+								window = new PopUp("INFORMATION","info","\n\n                  Loading ...","","");
+								window.setVisible(true);
+								window.lblIcon.setBounds(20, 45,50,50);
+							}
+							
+						}).start();;
 						List<String> tabs=new ArrayList<String>();
 						tabs.add("Save");
 						tabs.add("View");
@@ -319,6 +350,7 @@ public class SensorGUI extends Library{
 						tabs.add("Settings");
 						
 						new ActionGUI(tabs);
+						
 						ActionGUI.dialog.setVisible(true);
 						ActionGUI.savePanel.textField_Filename.requestFocusInWindow();
 						ActionGUI.savePanel.rdbtnNewDoc.setEnabled(false);
@@ -470,6 +502,16 @@ public class SensorGUI extends Library{
 			public void mouseClicked(MouseEvent e) {
 				if(ActionGUI.leaveControl)
 				{
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							window = new PopUp("INFORMATION","info","\n\n                  Loading ...","","");
+							window.setVisible(true);
+							window.lblIcon.setBounds(20, 45,50,50);
+						}
+						
+					}).start();;
+					
 					List<String> tabs=new ArrayList<String>();
 					tabs.add("Settings");
 					/*if(!IsEmpty(getProperty(TempFilePath,"TempPath")))
@@ -480,6 +522,7 @@ public class SensorGUI extends Library{
 					tabs.add("Document");*/
 					
 					new ActionGUI(tabs);
+					
 					ActionGUI.dialog.setVisible(true);
 				}
 

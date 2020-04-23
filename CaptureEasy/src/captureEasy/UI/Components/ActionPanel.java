@@ -25,11 +25,12 @@ import captureEasy.UI.SensorGUI;
 public class ActionPanel extends Library implements MouseListener,MouseMotionListener{
 	public JPanel ActionPanel;
 	public static JPanel panel_4;
-	JRadioButton rdbtnSavePreviousWork;
+	public JRadioButton rdbtnSavePreviousWork;
 	JRadioButton rdbtnContinuePreviousWork;
 	JRadioButton rdbtnDeletePreviousWork;
 	int saveTabIndex=0;
 	SettingsPanel settingsPanel=null;
+	private JButton btnProceed;
 
 	public ActionPanel(JTabbedPane TabbledPanel) {
 		ActionPanel = new JPanel();
@@ -59,6 +60,13 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 		ButtonGroup buttonGroup_2= new ButtonGroup();
 
 		rdbtnSavePreviousWork = new JRadioButton("Save previous work");
+		rdbtnSavePreviousWork.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdbtnDeletePreviousWork.setEnabled(true);
+				rdbtnContinuePreviousWork.setEnabled(true);
+				rdbtnSavePreviousWork.setEnabled(false);
+			}
+		});
 		buttonGroup_2.add(rdbtnSavePreviousWork);
 		rdbtnSavePreviousWork.setSelected(true);
 		rdbtnSavePreviousWork.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -69,6 +77,10 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 		rdbtnContinuePreviousWork.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try{
+					rdbtnDeletePreviousWork.setEnabled(true);
+					rdbtnContinuePreviousWork.setEnabled(false);
+					rdbtnSavePreviousWork.setEnabled(true);
+					btnProceed.setEnabled(true);
 				if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 				{
 					TabbledPanel.removeTabAt(saveTabIndex);
@@ -90,6 +102,10 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 		rdbtnDeletePreviousWork = new JRadioButton("Delete previous work");
 		rdbtnDeletePreviousWork.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				rdbtnDeletePreviousWork.setEnabled(false);
+				rdbtnContinuePreviousWork.setEnabled(true);
+				rdbtnSavePreviousWork.setEnabled(true);
+				btnProceed.setEnabled(true);
 				try{
 				if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 				{
@@ -109,15 +125,17 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 		rdbtnDeletePreviousWork.setBounds(66, 190, 219, 25);
 		panel_4.add(rdbtnDeletePreviousWork);
 
-		JButton btnProceed = new JButton("Proceed ");
+		btnProceed = new JButton("Proceed ");
 		ActionGUI.dialog.getRootPane().setDefaultButton(btnProceed);
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				btnProceed.setEnabled(false);
 				if(rdbtnSavePreviousWork.isSelected())
 				{
 					
 					if(TabbledPanel.getTitleAt(saveTabIndex).toString().contains("Save"))
 					{
+						
 						TabbledPanel.removeTabAt(saveTabIndex);
 						//if("false".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 						if(settingsPanel!=null)

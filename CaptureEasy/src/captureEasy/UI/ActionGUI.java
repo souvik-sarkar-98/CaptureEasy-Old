@@ -20,9 +20,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import captureEasy.Resources.Library;
 import captureEasy.UI.Components.ActionPanel;
+
 import captureEasy.UI.Components.ManageDocumentPanel;
 import captureEasy.UI.Components.SavePanel;
 import captureEasy.UI.Components.SettingsPanel;
@@ -156,7 +158,6 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 			}
 			TabbledPanel.setSelectedIndex(0);
 		}
-
 	}
 
 	@Override
@@ -224,24 +225,21 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 		}
 		else if(tabName.contains("Manage"))
 		{
-			/*try{
-				File[] files=new File(getProperty(PropertyFilePath,"DocPath")).listFiles();
-				for(File f:files)
-				{
-					if(f.isDirectory())
-					{
-						ManageDocumentPanel.monthList.add(f.getName());
-					}
-				}
-				File[] dates=new File(ManageDocumentPanel.month_1.getSelectedItem().toString()).listFiles();
-				for(File f:dates)
-				{
-					if(f.isDirectory())
-					{
-						ManageDocumentPanel.dayList.add(f.getName());
-					}
-				}
-			}catch(Exception e){}*/
+			try{
+				
+				/*System.out.println("356");
+				documentPanel.DocumentScrollPane.remove(documentPanel.panel_View);
+				//documentPanel.panel_View=null;
+				documentPanel.loadGUI();
+				documentPanel.DocumentScrollPane.add(documentPanel.panel_View);
+				documentPanel.showRootFile();
+				*/
+				DefaultMutableTreeNode node =new DefaultMutableTreeNode(new File(getProperty(PropertyFilePath,"DocPath")));
+				documentPanel.showChildren(node);
+				System.err.println((File)node.getUserObject());
+			
+			}catch(Exception e){e.printStackTrace();}
+			
 		}
 		else if(tabName.contains("Settings"))
 		{				

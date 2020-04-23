@@ -49,13 +49,15 @@ public class PopUp extends JDialog{
 	 * Launch the application.
 	 */
 	static Timer timer=null;
+	public JLabel lblIcon;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
 				try {
-					PopUp window = new PopUp("INFORMATION","info","Successfully Saved !!","Close","");
+					PopUp window = new PopUp("INFORMATION","info","\n\n                  Loading ...","","");
 					window.setVisible(true);
+					window.lblIcon.setBounds(20, 45,50,50);
 					window.getRootPane().setDefaultButton(window.btnNewButton);
 					new Timer(3000, new ActionListener() {
 				        @Override
@@ -78,6 +80,7 @@ public class PopUp extends JDialog{
 	
 	public PopUp(String title,String PopUpType,String text,String OkButton_Text,String cancelButton_Text) 
 	{
+		System.out.println("Hello");
 		control=false;
 		try{ActionGUI.dialog.setAlwaysOnTop(false);}catch(Exception e){}
 		try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
@@ -194,9 +197,9 @@ public class PopUp extends JDialog{
 		}
 		panel_5.add(panel_6);
 		
-		JLabel lblIcon = new JLabel("Icon");
-		lblIcon.setLocation(10, 35);
-		lblIcon.setSize(50,50);
+		lblIcon = new JLabel("Icon");
+		lblIcon.setBounds(10, 35,50,50);
+		
 		
 		try {
 			String filepath;
