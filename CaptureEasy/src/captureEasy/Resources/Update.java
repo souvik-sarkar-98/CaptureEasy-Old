@@ -19,6 +19,7 @@ public class Update extends Library implements Runnable {
 				SensorGUI.frame.setAlwaysOnTop(true);
 			}catch(Exception w){}
 			try{
+			//	System.out.println(ActionGUI.leaveControl);
 			if(ActionGUI.dialog !=null && SensorGUI.window!=null && ActionGUI.dialog.isVisible())
 			{
 			

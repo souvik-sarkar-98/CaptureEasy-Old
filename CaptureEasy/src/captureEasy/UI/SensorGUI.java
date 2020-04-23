@@ -155,7 +155,7 @@ public class SensorGUI extends Library{
 						Label_Pause.setIcon(new ImageIcon(ImageIO.read(pauseicon).getScaledInstance(size.width,size.height, java.awt.Image.SCALE_SMOOTH)));
 						Label_Pause.setToolTipText("Click Here to Pause");
 						SharedRepository.PauseThread=false;
-						resetClipboard(getProperty(ClipBoardDataFilePath,"ClipTextData"));
+						
 					}catch (IOException e3) {Label_Pause.setText("Pause"); logError(e3,"Exception in Icon loading: Image "+pauseicon.getPath()+" Not Available");}
 				}
 			}
@@ -190,6 +190,24 @@ public class SensorGUI extends Library{
 							try{ActionGUI.dialog.dispose();}catch(Exception e5){}
 							frame.dispose();
 							SharedRepository.stopThread=true;
+							String comm="";int c=0;
+							File[] f=new File(getProperty(TempFilePath,"Comments")).listFiles();
+							if(f.length>0)
+							{
+								for(int i=0;i<f.length;i++)
+								{
+									if(comments.get(f[i+1].getName())!=null)
+									{
+										if(c!=0)
+											comm=comm+"_";
+										comm=comm+f[i+1].getName()+"->"+comments.get(f[i+1].getName());
+										c++;
+									}
+								}
+								getProperty(DataFilePath,"Comments");
+								updateProperty(DataFilePath,"Comments","");
+							}
+							
 							try {
 								GlobalScreen.unregisterNativeHook();
 							} catch (NativeHookException e1) {

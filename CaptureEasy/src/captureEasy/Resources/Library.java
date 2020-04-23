@@ -30,6 +30,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
 import captureEasy.UI.Components.SavePanel;
@@ -110,7 +111,6 @@ public class Library extends SharedRepository
 		try {
 			properties.load(new FileReader(filePath));
 			value=properties.getProperty(key);
-
 		} catch (IOException e) {
 			File file = new File(createFolder(filePath));
 			FileOutputStream fileOut;
@@ -235,9 +235,25 @@ public class Library extends SharedRepository
 		StringSelection stringSelection = new StringSelection(text);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents((Transferable) stringSelection, null);
 	}
+	public int lastFileName(String dirPath){
+	    File dir = new File(dirPath);
+	    File[] files = dir.listFiles();
+	    if (files == null || files.length == 0) {
+	        return 0;
+	    }
+	    int res=0;
+	    for (int i = 0; i < files.length; i++) {
+	    	int in=Integer.parseInt(files[i].getName().substring(0,files[i].getName().indexOf(".")));
+	       if (in>res) {
+	           res=in;
+	       }
+	    }
+	    return res;
+	}
 	public static int c=0;
 	public static boolean captureScreen() {
 		String Imageformat=getProperty(PropertyFilePath,"ImageFormat").toLowerCase();
+		System.out.println("hii inside");
 		if(Imageformat==null)
 		{
 			
@@ -249,11 +265,13 @@ public class Library extends SharedRepository
 			image = (new Robot()).createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 			File file = new File(String.valueOf(createFolder(getProperty(TempFilePath,"TempPath"))) + "\\" + screenshot_name);
 			ImageIO.write(image, Imageformat, file);
+			System.out.println(file.getAbsolutePath()+"     "+file.exists());
 		} catch (Exception e) 
 		{
 			logError(e,e.getClass().getName()+" Exception occured while taking screenshot");
 			new PopUp("ERROR","error",e.getClass().getName()+"Exception occured while taking screenshot","Ok, I understood","").setVisible(true);
 		}  
+		
 		SensorGUI.frame.setLocation(Integer.parseInt(getProperty(PropertyFilePath,"Xlocation")),Integer.parseInt(getProperty(PropertyFilePath,"Ylocation")));
 		SensorGUI.frame.setAlwaysOnTop(true);
 		return true;
@@ -277,10 +295,10 @@ public class Library extends SharedRepository
 				pic = new FileInputStream(files[i].getPath());
 				SavePanel.lblUpdatingFiles.setText("Storing "+files[i].getName()+" to "+FileName);
 				run.addBreak();
+				if(comments.get(files[i].getName())!=null)
+					run.setText(comments.get(files[i].getName()));
 				run.addPicture(pic, XWPFDocument.PICTURE_TYPE_PNG, files[i].getName(), Units.toEMU(470), Units.toEMU(265));
 				SharedRepository.progress=(int)Math.round(((Double.valueOf(i+1))/Double.valueOf(files.length))*100);
-				//System.err.println((int)Math.round(((Double.valueOf(i+1))/Double.valueOf(files.length))*100));
-
 				pic.close();
 			} catch (InvalidFormatException | IOException e) {
 				logError(e,e.getClass().getName()+" occured while pasteing '"+files[(int) i].getName()+"'. File Path: "+files[i].getPath());

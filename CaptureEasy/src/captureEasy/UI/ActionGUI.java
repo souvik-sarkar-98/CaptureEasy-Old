@@ -20,8 +20,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import captureEasy.Resources.Library;
 import captureEasy.UI.Components.ActionPanel;
 
@@ -131,6 +129,7 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 					TabbledPanel.setTitleAt(i, PRE_HTML + "View\nImages" + POST_HTML);
 					if(i!=0)
 						viewPanel.lblExit.setEnabled(false);
+					
 				}
 				else if(tabs.get(i).equalsIgnoreCase("Document"))
 				{	
@@ -209,34 +208,30 @@ public class ActionGUI extends Library  implements ChangeListener,MouseListener,
 		else if(tabName.contains("View"))
 		{
 			ViewPanel.files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
-			System.out.println(timeStamp());
 			sortFiles(ViewPanel.files);
-			System.out.println(timeStamp());
 			if(ViewPanel.ImageLabel.getToolTipText()==null)
 				ViewPanel.imgId=ViewPanel.files.length-1;
-			System.out.println(ViewPanel.imgId);
-			System.out.println();
+			
 			try {
 				ViewPanel.ImageLabel.setToolTipText("<html>Filename : "+ViewPanel.files[ViewPanel.imgId].getName()+"<br><br>Click image to zoom</html>");
 				ViewPanel.ImageLabel.setIcon(new ImageIcon(ImageIO.read(ViewPanel.files[ViewPanel.imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 			} catch (IOException e) {
-				System.out.println("HHHiioi");
 			}
 		}
 		else if(tabName.contains("Manage"))
 		{
 			try{
 				
-				/*System.out.println("356");
+				//System.out.println("356");
 				documentPanel.DocumentScrollPane.remove(documentPanel.panel_View);
 				//documentPanel.panel_View=null;
 				documentPanel.loadGUI();
 				documentPanel.DocumentScrollPane.add(documentPanel.panel_View);
 				documentPanel.showRootFile();
-				*/
-				DefaultMutableTreeNode node =new DefaultMutableTreeNode(new File(getProperty(PropertyFilePath,"DocPath")));
-				documentPanel.showChildren(node);
-				System.err.println((File)node.getUserObject());
+				
+				//DefaultMutableTreeNode node =new DefaultMutableTreeNode(new File(getProperty(PropertyFilePath,"DocPath")));
+				//documentPanel.showChildren(node);
+				//System.err.println((File)node.getUserObject());
 			
 			}catch(Exception e){e.printStackTrace();}
 			

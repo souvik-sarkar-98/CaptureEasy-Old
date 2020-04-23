@@ -21,14 +21,13 @@ public class LaunchApplication extends Library{
 	}
 	public static void Perform() 
 	{	
-		if(!(new File(createFolder(Log4jPropertyFilePath)).exists()))
+		if(!(new File(createFolder(Log4jPropertyFilePath)).exists()) || getProperty(Log4jPropertyFilePath,"log4j.rootLogger")==null || getProperty(Log4jPropertyFilePath,"log4j.rootLogger").replaceAll("\\s", "")=="")
 		{
 			setLog4jProperty();
 		}
 
-		if(!new File(createFolder(PropertyFilePath)).exists())
+		if(!new File(createFolder(PropertyFilePath)).exists() || getProperty(PropertyFilePath,"DocPath")==null || getProperty(PropertyFilePath,"DocPath").replaceAll("\\s", "")=="")
 		{
-			
 			getProperty(TempFilePath,"TempPath");
 			updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 			List<String> tabs=new ArrayList<String>();
@@ -42,7 +41,7 @@ public class LaunchApplication extends Library{
 			ActionGUI.tagDrop=false;
 			ActionGUI.settingsPanel.comboBox_CaptureKey.setSelectedIndex(0);
 			ActionGUI.settingsPanel.comboBox_ImageFormat.setSelectedIndex(0);
-					
+			
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 		}
 		else if (new File(createFolder(PropertyFilePath)).exists() &&  !IsEmpty(createFolder(getProperty(TempFilePath,"TempPath"))))

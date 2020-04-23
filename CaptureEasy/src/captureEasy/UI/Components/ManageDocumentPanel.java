@@ -38,6 +38,8 @@ import javax.swing.table.TableColumn;
 import captureEasy.Resources.Library;
 
 import captureEasy.UI.ActionGUI;
+import captureEasy.UI.PopUp;
+
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -110,8 +112,11 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 	private JScrollPane scrollPane_Tree;
 	public TreeSelectionListener treeSelectionListener;
 	private JSplitPane splitPane_View;
+
+	public  JTabbedPane TabbledPanel;
 	public ManageDocumentPanel(JTabbedPane TabbledPanel)
 	{
+		this.TabbledPanel=TabbledPanel;
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
@@ -230,17 +235,23 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
+			try{
 			loadGUI();
 			DocumentScrollPane.add(panel_View);
 			showRootFile();
+			}catch(Exception e)
+			{
+				TabbledPanel.setSelectedIndex(TabbledPanel.getTabCount()-1);
+			}
+			
 
 		}
 
 	}
 
-	public void loadGUI()
+	public void loadGUI() 
 	{
+		try{
 		panel_View = new JPanel();
 		panel_View.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		panel_View.setBounds(10, 57, 415, 245);
@@ -260,7 +271,13 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 				System.out.println((File)node.getUserObject());
 			}
 		};
-		File RFile=new File (getProperty(PropertyFilePath,"DocPath"));
+		
+		String DocUMENTpATH=getProperty(PropertyFilePath,"DocPath");
+		if(DocUMENTpATH==null || "".equals(DocUMENTpATH.replaceAll("\\s", "")))
+		{
+			throw new Exception();
+		}
+		File RFile=new File (DocUMENTpATH);
 
 		// show the file system roots.
 		File[] roots =new SingleRootFileSystemView(RFile).getRoots();
@@ -337,7 +354,10 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 			    }
 			  }
 			});
-		
+		}catch(Exception e)
+		{
+			TabbledPanel.setSelectedIndex(TabbledPanel.getTabCount()-1);
+		}
 
 
 	}
@@ -389,7 +409,7 @@ public class ManageDocumentPanel extends Library implements MouseListener,MouseM
 
 	public void showRootFile() {
 		// ensure the main files are displayed
-		tree.setSelectionInterval(0,0);
+		try{tree.setSelectionInterval(0,0);}catch(Exception e){}
 	}
 
 	public TreePath findTreePath(File find) {

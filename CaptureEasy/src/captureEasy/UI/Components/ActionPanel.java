@@ -180,6 +180,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				}
 				else if(rdbtnContinuePreviousWork.isSelected())
 				{
+					Library.c=lastFileName(getProperty(TempFilePath,"TempPath"));
 					ActionGUI.dialog.dispose();
 					ActionGUI.leaveControl=true;
 					try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}

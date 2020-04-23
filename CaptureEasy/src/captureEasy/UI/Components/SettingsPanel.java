@@ -334,7 +334,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 									try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e5){}
 								}
 								
-								else if(BtnPanelState.equalsIgnoreCase(getProperty(PropertyFilePath,"SensorBTNPanelVisible")) && CaptureKey_Current.equals(CaptureKey_Prev) && DocPath_Current.equals(DocPath_Previous) && showFolderNameField_Current.equals(showFolderNameField_Previous)&& setFoldernameMandatory_Current.equals(setFoldernameMandatory_Previous) && ScreenRecording_Current.equals(ScreenRecording_Prev) && (Math.abs(Xvalue_Prev-Xlocation)==0 || Math.abs(Xvalue_Prev-Xlocation)==Xvalue_Prev) && (Math.abs(Yvalue_Prev-Ylocation)==0 || Math.abs(Yvalue_Prev-Xlocation)==Yvalue_Prev)  && ImageFormat_Current.equals(ImageFormat_Prev))
+								else if(BtnPanelState.equals(getProperty(PropertyFilePath,"SensorBTNPanelVisible")) && CaptureKey_Current.equals(CaptureKey_Prev) && DocPath_Current.equals(DocPath_Previous) && showFolderNameField_Current.equals(showFolderNameField_Previous)&& setFoldernameMandatory_Current.equals(setFoldernameMandatory_Previous) && ScreenRecording_Current.equals(ScreenRecording_Prev) && (Math.abs(Xvalue_Prev-Xlocation)==0 || Math.abs(Xvalue_Prev-Xlocation)==Xvalue_Prev) && (Math.abs(Yvalue_Prev-Ylocation)==0 || Math.abs(Yvalue_Prev-Xlocation)==Yvalue_Prev)  && ImageFormat_Current.equals(ImageFormat_Prev))
 								{
 									PopUp window = new PopUp("ERROR","error","No changes have been made !!","Ok, I understood","");
 									window.setVisible(true);
@@ -498,7 +498,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 					public void actionPerformed(ActionEvent arg0) {
 						if(getProperty(PropertyFilePath,"DocPath")==null)
 						{
-						PopUp p=	new PopUp("ERROR","error","Sorry !! You cannot cancel this modal during setup. Please complete the setup process","Ok, I understood","");
+						PopUp p=new PopUp("ERROR","error","Sorry !! You cannot cancel this modal during setup. Please complete the setup process","Ok, I understood","");
 						p.setVisible(true);
 						try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e5){}
 						/*p.btnNewButton.addActionListener(new ActionListener() {

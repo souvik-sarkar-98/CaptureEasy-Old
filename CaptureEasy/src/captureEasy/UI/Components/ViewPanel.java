@@ -20,6 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.MatteBorder;
 
 import captureEasy.Resources.Library;
+import captureEasy.Resources.SharedRepository;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 
@@ -37,6 +38,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 	public static int imgId;
 	PopUp p = null;
 	public JLabel lblExit;
+	private JLabel label_SetComment;
 	public ViewPanel(JTabbedPane TabbledPanel)
 	{
 		
@@ -98,6 +100,9 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							try {
 								ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
+								if(comments.get(files[imgId].getName())!=null)
+									ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br>Comment:"+comments.get(files[imgId].getName())+"<br><br>Click image to zoom</html>");
+
 							} catch (IOException e) {}
 							
 						}
@@ -105,6 +110,7 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 					try {
 						
 						label_Prev.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\left-arrow.png")).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+						
 					} catch (IOException e) {
 
 					}
@@ -151,6 +157,9 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 							try {
 								ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
 								ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
+								if(comments.get(files[imgId].getName())!=null)
+									ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br>Comment:"+comments.get(files[imgId].getName())+"<br><br>Click image to zoom</html>");
+
 							} catch (IOException e) {}
 							
 						}
@@ -183,9 +192,14 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 								public void actionPerformed(ActionEvent arg0) {
 									p.dispose();
 									files[imgId].delete();
-									files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
+									ViewPanel.files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
+									sortFiles(ViewPanel.files);
 									try {
 										ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
+										ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
+										if(comments.get(files[imgId].getName())!=null)
+											ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br>Comment:"+comments.get(files[imgId].getName())+"<br><br>Click image to zoom</html>");
+
 									} catch (IOException e) {}
 								}
 							});				
@@ -244,6 +258,40 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 				}
 				lblExit.setBounds(340, 7, 20, 20);
 				panel_Button.add(lblExit);
+				
+				label_SetComment = new JLabel("");
+				label_SetComment.setBounds(47, 3, 25, 25);
+				panel_Button.add(label_SetComment);
+				label_SetComment.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						if(label_SetComment.isEnabled())
+						{
+							String populateComment=comments.get(files[imgId].getName());
+							if(populateComment==null)
+								populateComment="";
+							PopUp pp=new PopUp("Enter comment for "+files[imgId].getName(),"comment",populateComment,"Done","Cancel");
+							pp.setVisible(true);
+							pp.btnNewButton.addActionListener(new ActionListener(){
+
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									SharedRepository.comments.put(files[imgId].getName(),pp.txtrExceptionOccuredPlease.getText() );	
+									ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br>Comment:"+comments.get(files[imgId].getName())+"<br><br>Click image to zoom</html>");
+									
+								}
+								
+							});
+						}
+					}
+				});
+				label_SetComment.setSize(new Dimension(30, 30));
+
+				label_SetComment.setToolTipText("Set comment to this picture");
+				try {
+					label_SetComment.setIcon(new ImageIcon(ImageIO.read(new File("Icons\\comment.png")).getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH)));
+				} catch (IOException e) {
+				}
 			}
 		}
 	}
