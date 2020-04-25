@@ -39,6 +39,7 @@ import captureEasy.Resources.SharedRepository;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
 import captureEasy.UI.SensorGUI;
+import javax.swing.UIManager;
 
 public class SavePanel extends Library implements MouseListener,MouseMotionListener{
 
@@ -63,13 +64,18 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 	PopUp popup;
 	public String existingfilepath;
 	String newFileName;
+	private boolean renameFlag=false;
 
-
-	public JPanel panel_Progress;
+	public static JPanel panel_Progress;
 	public static JLabel lblUpdatingFiles;
 	public JPanel panel_Update;
 	public JLabel lblParFol;
 	public JTextField textField_ParFol;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JRadioButton rdbtnYes;
+	public static JRadioButton rdbtnNo;
+	private JLabel lblDoYouWant;
+	public JCheckBox chckbxSelectExistingDocument;
 	public SavePanel(JTabbedPane TabbledPanel) {
 
 		SavePanel = new JPanel();
@@ -94,7 +100,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		label.setHorizontalTextPosition(SwingConstants.CENTER);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		label.setBounds(12, 13, 415, 35);
+		label.setBounds(12, 10, 415, 25);
 		SavePanel.add(label);
 
 		rdbtnNewDoc = new JRadioButton();
@@ -102,6 +108,12 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		rdbtnNewDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				renameFlag=false;
+				chckbxOverwriteSelectedFile.setText("Overwrite selected file");
+				chckbxSelectExistingDocument.setVisible(false);
+				rdbtnNo.setBounds(360, 230, 50, 16);
+				lblDoYouWant.setBounds(15, 230, 299, 16);
+				rdbtnYes.setBounds(312, 230, 50, 16);
 				if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 				{
 					lblParFol.setVisible(true);
@@ -114,7 +126,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					textField_ParFol.setVisible(false);
 					textField_Filename.setColumns(22);
 				}
-				panel_Input.setBounds(28, 162, 365, 70);
+				panel_Input.setBounds(28, 150, 365, 70);
 
 				rdbtnNewDoc.setEnabled(false);
 				rdbtnExDoc.setEnabled(true);
@@ -133,25 +145,31 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				btnChooseFile.setVisible(false);
 				chckbxOverwriteSelectedFile.setVisible(false);
 
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 			}
 		});
-		rdbtnNewDoc.setText("Add to New Microsoft Word Document");
+		rdbtnNewDoc.setText("Create New Microsoft Word Document");
 		rdbtnNewDoc.setSelected(true);
 		rdbtnNewDoc.setPreferredSize(new Dimension(400, 25));
 		rdbtnNewDoc.setFont(new Font("Tahoma", Font.BOLD, 16));
 		rdbtnNewDoc.setFocusable(true);
-		rdbtnNewDoc.setBounds(18, 45, 375, 35);
+		rdbtnNewDoc.setBounds(18, 40, 375, 25);
 		SavePanel.add(rdbtnNewDoc);
 		rdbtnExDoc = new JRadioButton();
 		g.add(rdbtnExDoc);
 		rdbtnExDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				renameFlag=false;
+				chckbxOverwriteSelectedFile.setText("Overwrite selected file");
+				chckbxSelectExistingDocument.setVisible(false);
+				rdbtnNo.setBounds(360, 230, 50, 16);
+				lblDoYouWant.setBounds(15, 230, 299, 16);
+				rdbtnYes.setBounds(312, 230, 50, 16);
 				lblParFol.setVisible(false);
 				textField_ParFol.setVisible(false);
 
-				panel_Input.setBounds(28, 162, 365, 70);
+				panel_Input.setBounds(28, 150, 365, 70);
 
 				rdbtnNewDoc.setEnabled(true);
 				rdbtnExDoc.setEnabled(false);
@@ -169,13 +187,13 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				btnChooseFile.requestFocusInWindow();
 				chckbxOverwriteSelectedFile.setVisible(false);
 
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 			}
 		});
 		rdbtnExDoc.setText("Add to Existing Microsoft Word Document");
 		rdbtnExDoc.setPreferredSize(new Dimension(390, 25));
 		rdbtnExDoc.setFont(new Font("Tahoma", Font.BOLD, 16));
-		rdbtnExDoc.setBounds(18, 80, 375, 35);
+		rdbtnExDoc.setBounds(18, 75, 375, 25);
 		SavePanel.add(rdbtnExDoc);
 
 		rdbtnSavePDF = new JRadioButton("Save as PDF");
@@ -183,7 +201,13 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		rdbtnSavePDF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-
+				renameFlag=true;
+				chckbxSelectExistingDocument.setVisible(true);
+				chckbxSelectExistingDocument.setSelected(false);
+				chckbxOverwriteSelectedFile.setText("Overwrite selected file");
+				rdbtnNo.setBounds(360, 230, 50, 16);
+				lblDoYouWant.setBounds(15, 230, 299, 16);
+				rdbtnYes.setBounds(312, 230, 50, 16);
 				if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 				{
 					lblParFol.setVisible(true);
@@ -196,7 +220,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					textField_ParFol.setVisible(false);
 					textField_Filename.setColumns(22);
 				}
-				panel_Input.setBounds(28, 162, 365, 70);
+				panel_Input.setBounds(28, 150, 365, 70);
 				ActionGUI.dialog.setAlwaysOnTop(true);
 				rdbtnNewDoc.setEnabled(true);
 				rdbtnExDoc.setEnabled(true);
@@ -214,13 +238,13 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				btnChooseFile.setVisible(false);
 				chckbxOverwriteSelectedFile.setVisible(false);
 
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 
 			}
 		});
 		rdbtnSavePDF.setPreferredSize(new Dimension(390, 25));
 		rdbtnSavePDF.setFont(new Font("Tahoma", Font.BOLD, 16));
-		rdbtnSavePDF.setBounds(18, 115, 130, 35);
+		rdbtnSavePDF.setBounds(18, 110, 130, 25);
 		SavePanel.add(rdbtnSavePDF);
 
 		panel_Input = new JPanel();
@@ -229,7 +253,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		panel_Input.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel_Input.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_Input.setBackground(new Color(255, 255, 204));
-		panel_Input.setBounds(28, 162, 365, 70);
+		panel_Input.setBounds(28, 150, 365, 70);
 
 		SavePanel.add(panel_Input);
 		panel_Input.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -282,10 +306,10 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				fileDialog.setVisible(true);
 				existingfilepath = String.valueOf(fileDialog.getDirectory()) + fileDialog.getFile();
 				ActionGUI.dialog.setAlwaysOnTop(true);
-				panel_Input.setBounds(28, 162, 365, 70);
+				panel_Input.setBounds(28, 150, 365, 70);
 				if (existingfilepath.equalsIgnoreCase("nullnull") || existingfilepath.equals("")) 
 				{
-					btnDone.setEnabled(false);
+					btnDone.setVisible(false);
 					chckbxOverwriteSelectedFile.setVisible(false);
 					btnChooseFile.setBackground(Color.pink);
 					btnChooseFile.requestFocusInWindow();
@@ -299,7 +323,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 				{
 
 					File file = new File(existingfilepath);
-					if (!file.renameTo(file)) 
+					if (!file.renameTo(file) && !renameFlag) 
 					{
 						btnChooseFile.setBackground(Color.YELLOW);
 						ActionGUI.dialog.setAlwaysOnTop(false);
@@ -309,13 +333,13 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 						chckbxOverwriteSelectedFile.setVisible(true);
 						chckbxOverwriteSelectedFile.setSelected(false);
 						chckbxOverwriteSelectedFile.setEnabled(false);
-						panel_Input.setBounds(28, 153, 380, 92);
+						panel_Input.setBounds(28, 137, 380, 92);
 						textField_Filename.setColumns(15);
 						lblEnterFilename.setVisible(true);
 						textField_Filename.setVisible(true);
 						textField_Filename.setText("");
 						textField_Filename.requestFocusInWindow();
-						btnDone.setEnabled(false);
+						btnDone.setVisible(false);
 					}
 					else 
 					{
@@ -323,7 +347,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 						chckbxOverwriteSelectedFile.setSelected(true);
 						chckbxOverwriteSelectedFile.setEnabled(true);
 						btnChooseFile.setBackground(Color.GREEN);
-						panel_Input.setBounds(28, 162, 365, 70);
+						panel_Input.setBounds(28, 150, 365, 70);
 						if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"ArrangeSSDatewise")))
 						{
 							textField_Filename.setColumns(22);
@@ -335,7 +359,12 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 						lblEnterFilename.setVisible(false);
 						textField_Filename.setVisible(false);
 						textField_Filename.setText("");
-						btnDone.setEnabled(true);
+						btnDone.setVisible(true);
+						if(renameFlag==true)
+						{
+							btnDone.setVisible(true);
+							chckbxOverwriteSelectedFile.setSelected(false);
+						}
 					} 
 				} 
 			}
@@ -359,10 +388,15 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		chckbxOverwriteSelectedFile.setVisible(false);
 		chckbxOverwriteSelectedFile.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		chckbxOverwriteSelectedFile.addActionListener(new ActionListener() {
+
+
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxOverwriteSelectedFile.isSelected())
 				{
-					panel_Input.setBounds(28, 162, 365, 70);
+					panel_Input.setBounds(28, 150, 365, 70);
+					rdbtnNo.setBounds(360, 230, 50, 16);
+					lblDoYouWant.setBounds(15, 230, 299, 16);
+					rdbtnYes.setBounds(312, 230, 50, 16);
 					if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"ArrangeSSDatewise")))
 					{
 						textField_Filename.setColumns(22);
@@ -374,18 +408,53 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					lblEnterFilename.setVisible(false);
 					textField_Filename.setVisible(false);
 					textField_Filename.setText("");
-
-					btnDone.setEnabled(true);
+					btnDone.setVisible(true);
+					if(renameFlag)
+					{
+						rdbtnNo.setBounds(360, 233, 50, 16);
+						lblDoYouWant.setBounds(15, 233, 299, 16);
+						rdbtnYes.setBounds(312, 233, 50, 16);
+						panel_Input.setBounds(28, 137, 380, 92);
+						textField_Filename.setColumns(15);
+						lblEnterFilename.setVisible(true);
+						textField_Filename.setVisible(true);
+						textField_Filename.setText("");
+						textField_Filename.requestFocusInWindow();
+						btnDone.setVisible(false);
+					}
 				}
 				else
 				{
-					panel_Input.setBounds(28, 153, 380, 92);
+					rdbtnNo.setBounds(360, 233, 50, 16);
+					lblDoYouWant.setBounds(15, 233, 299, 16);
+					rdbtnYes.setBounds(312, 233, 50, 16);
+					panel_Input.setBounds(28, 137, 380, 92);
 					textField_Filename.setColumns(15);
 					lblEnterFilename.setVisible(true);
 					textField_Filename.setVisible(true);
 					textField_Filename.setText("");
 					textField_Filename.requestFocusInWindow();
-					btnDone.setEnabled(false);
+					btnDone.setVisible(false);
+					if(renameFlag)
+					{
+						panel_Input.setBounds(28, 150, 365, 70);
+						rdbtnNo.setBounds(360, 230, 50, 16);
+						lblDoYouWant.setBounds(15, 230, 299, 16);
+						rdbtnYes.setBounds(312, 230, 50, 16);
+						if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"ArrangeSSDatewise")))
+						{
+							textField_Filename.setColumns(22);
+						}
+						else
+						{
+							textField_Filename.setColumns(16);
+						}
+						lblEnterFilename.setVisible(false);
+						textField_Filename.setVisible(false);
+						textField_Filename.setText("");
+						btnDone.setVisible(true);
+
+					}
 				}
 			}
 		});
@@ -400,6 +469,102 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		panel_Input.add(textField_Filename);
 		textField_Filename.setToolTipText("Enter Filename");
 		textField_Filename.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		lblDoYouWant = new JLabel("Do you want to continue with current screenshots ?");
+		lblDoYouWant.setBounds(15, 230, 299, 16);
+		SavePanel.add(lblDoYouWant);
+		textField_Filename.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		rdbtnYes = new JRadioButton("Yes");
+		buttonGroup.add(rdbtnYes);
+		rdbtnYes.setBounds(312, 230, 50, 16);
+		SavePanel.add(rdbtnYes);
+
+		rdbtnNo = new JRadioButton("No");
+		buttonGroup.add(rdbtnNo);
+		rdbtnNo.setSelected(true);
+		rdbtnNo.setBounds(360, 230, 50, 16);
+
+		SavePanel.add(rdbtnNo);
+
+		chckbxSelectExistingDocument = new JCheckBox("Select Existing Microsoft Word ");
+		chckbxSelectExistingDocument.setVisible(false);
+		chckbxSelectExistingDocument.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				PopUp pop=null;
+				
+				if(chckbxSelectExistingDocument.isSelected())
+				{
+					pop=new PopUp("Information","info","Please be noted that only images will be imported inside newly created PDF. Please untick the checkbox if you don't want to proceed further.","Ok, Fine","");
+					pop.setVisible(true);
+					rdbtnNo.setBounds(360, 230, 50, 16);
+					lblDoYouWant.setBounds(15, 230, 299, 16);
+					rdbtnYes.setBounds(312, 230, 50, 16);
+					lblParFol.setVisible(false);
+					textField_ParFol.setVisible(false);
+					chckbxOverwriteSelectedFile.setText("Rename selected file");
+					chckbxOverwriteSelectedFile.setEnabled(true);
+					chckbxOverwriteSelectedFile.setSelected(false);
+
+					panel_Input.setBounds(28, 150, 365, 70);
+
+
+					lblEnterFilename.setVisible(false);
+					textField_Filename.setVisible(false);
+					textField_Filename.setText("");
+					existingfilepath="";
+					newFileName="";
+					btnChooseFile.setBackground(Color.WHITE);
+
+					lblChooseFile.setVisible(true);
+					btnChooseFile.setVisible(true);
+					btnChooseFile.requestFocusInWindow();
+					chckbxOverwriteSelectedFile.setVisible(false);
+
+					btnDone.setVisible(false);
+				}
+				else 
+				{
+					rdbtnNo.setBounds(360, 230, 50, 16);
+					lblDoYouWant.setBounds(15, 230, 299, 16);
+					rdbtnYes.setBounds(312, 230, 50, 16);
+					if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+					{
+						lblParFol.setVisible(true);
+						textField_ParFol.setVisible(true);
+						textField_Filename.setColumns(16);
+					}
+					else
+					{
+						lblParFol.setVisible(false);
+						textField_ParFol.setVisible(false);
+						textField_Filename.setColumns(22);
+					}
+					panel_Input.setBounds(28, 150, 365, 70);
+
+
+					chckbxOverwriteSelectedFile.setText("Overwrite selected file");
+					chckbxOverwriteSelectedFile.setEnabled(true);
+					lblEnterFilename.setVisible(true);
+					textField_Filename.setVisible(true);
+					textField_Filename.requestFocusInWindow();
+
+					textField_Filename.setText("");
+					existingfilepath="";
+					newFileName="";
+					btnChooseFile.setBackground(Color.WHITE);
+
+					lblChooseFile.setVisible(false);
+					btnChooseFile.setVisible(false);
+					chckbxOverwriteSelectedFile.setVisible(false);
+
+					btnDone.setVisible(false);
+				}
+			}
+		});
+		chckbxSelectExistingDocument.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		chckbxSelectExistingDocument.setBounds(170, 110, 223, 25);
+		SavePanel.add(chckbxSelectExistingDocument);
 
 		if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 		{
@@ -424,17 +589,16 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		panel_Save_Buttons = new JPanel();
 		panel_Save_Buttons.setBorder(new MatteBorder(0, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		panel_Save_Buttons.setBounds(12, 259, 413, 46);
-		panel_Save_Buttons.setLayout(null);
+		panel_Save_Buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		btnDone = new JButton("Okay");
 		btnDone.setMargin(new Insets(2, 5, 2, 5));
-		btnDone.setBounds(130, 5, 73, 29);
-		btnDone.setBackground(Color.BLUE);
+		btnDone.setBackground(UIManager.getColor("Button.background"));
 		btnDone.setForeground(Color.BLACK);
 		panel_Save_Buttons.add(btnDone);
 		SaveScrollPane.add(panel_Save_Buttons);
 		btnDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")) && "true".equalsIgnoreCase(getProperty(PropertyFilePath,"setFolderNameMandatory")) && textField_ParFol.getText().replaceAll("\\s", "").equals(""))
+				if(!chckbxSelectExistingDocument.isSelected() && "true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")) && "true".equalsIgnoreCase(getProperty(PropertyFilePath,"setFolderNameMandatory")) && textField_ParFol.getText().replaceAll("\\s", "").equals(""))
 				{
 					new PopUp("ERROR","error","You have set parent folder name field as mandatory. Please update settings to proceed further","Ok, I understood","").setVisible(true);
 					textField_ParFol.setBackground(Color.PINK);
@@ -450,6 +614,11 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 					}
 					else
 					{
+						if(ActionPanel.panel_4!=null)
+						{
+							ActionGUI.actionPanel.rdbtnContinuePreviousWork.setEnabled(false);
+							ActionGUI.actionPanel.rdbtnDeletePreviousWork.setEnabled(false);
+						}
 						ActionPanel.panel_4=null;
 						textField_ParFol.setBackground(Color.WHITE);
 						SavePanel.setVisible(false);
@@ -492,6 +661,7 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 							public void run() {
 								do
 								{
+									ProgressBar.repaint();
 									ProgressBar.setValue(SharedRepository.progress);
 									ProgressBar.repaint();
 								}while(SharedRepository.progress!=100);
@@ -510,8 +680,11 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 								}
 								else if(rdbtnSavePDF.isSelected())
 								{
-									//new PopUp("Information","info","Sorry !! This facility is currently  unavailable. This will save as document","Ok, Fine","").setVisible(true);
-									createNewWord(getProperty(PropertyFilePath,"DocPath"),textField_Filename.getText(),textField_ParFol.getText());
+									if(chckbxSelectExistingDocument.isSelected())
+										SaveAsPDFFromWord(existingfilepath,textField_Filename.getText());
+									else
+										SaveAsPDF(getProperty(PropertyFilePath,"DocPath"),textField_Filename.getText(),textField_ParFol.getText());
+									
 								}
 								ActionGUI.dialog.dispose();
 								ActionGUI.leaveControl=true;
@@ -529,7 +702,6 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 
 		exitbtn = new JButton("Cancel");
 		exitbtn.setMargin(new Insets(2, 5, 2, 5));
-		exitbtn.setBounds(210, 5, 87, 29);
 		exitbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ActionGUI.dialog.dispose();
@@ -540,7 +712,8 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 		panel_Save_Buttons.add(exitbtn);
 		exitbtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		
+		btnDone.setText("Okay");
+
 
 	}
 
@@ -573,26 +746,41 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 
 	public void DocumentCheck(String ActionType)  
 	{
+		ActionGUI.savePanel.btnDone.setText("Okay");
 		try{
 			newFileName = textField_Filename.getText();
 			if (newFileName.contains(Character.toString('"')) || newFileName.contains("/") || newFileName.contains("\\") || newFileName.contains(":") || newFileName.contains("*") || newFileName.contains("?") || newFileName.contains("<") || newFileName.contains(">") || newFileName.contains("|")) 
 			{
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 				textField_Filename.setBackground(Color.PINK);
 				textField_Filename.requestFocusInWindow();
 				if(ActionType.equalsIgnoreCase("Insert") && PopUp.control)
 					new PopUp("ERROR","error", "A file name can not contain any of the following "
 							+ "characters: \\ / : * ? " + Character.toString('"') + " < > | ","Ok, I understood","").setAlwaysOnTop(true);;
 			}
-			else if ((new File(String.valueOf(subFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText())) + "\\" + newFileName + ".docx")).exists()) 
+			else if (rdbtnSavePDF.isSelected() && (new File(getSubFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText()) + "\\" + newFileName + ".pdf")).exists()) 
 			{
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 				textField_Filename.setBackground(Color.PINK);
 				//textField_Filename.requestFocusInWindow();
 				if(ActionType.equalsIgnoreCase("Insert"))
 				{
 					ActionGUI.dialog.setAlwaysOnTop(false);
-					new PopUp("ERROR","error","There is already a file with the same name in "+new File(String.valueOf(subFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText())) 
+					new PopUp("ERROR","error","There is already a file with the same name in "+new File(String.valueOf(getSubFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText())) 
+							+ "\\" + newFileName + ".docx").getParentFile()+" folder.","Ok, I understood","").setAlwaysOnTop(true);;
+
+				}
+
+			}
+			else if ((new File(getSubFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText()) + "\\" + newFileName + ".docx")).exists()) 
+			{
+				btnDone.setVisible(false);
+				textField_Filename.setBackground(Color.PINK);
+				//textField_Filename.requestFocusInWindow();
+				if(ActionType.equalsIgnoreCase("Insert"))
+				{
+					ActionGUI.dialog.setAlwaysOnTop(false);
+					new PopUp("ERROR","error","There is already a file with the same name in "+new File(String.valueOf(getSubFolders(getProperty(PropertyFilePath,"DocPath"),textField_ParFol.getText())) 
 							+ "\\" + newFileName + ".docx").getParentFile()+" folder.","Ok, I understood","").setAlwaysOnTop(true);;
 
 				}
@@ -600,13 +788,13 @@ public class SavePanel extends Library implements MouseListener,MouseMotionListe
 			}
 			else 
 			{
-				btnDone.setEnabled(true);
+				btnDone.setVisible(true);
 				textField_Filename.setBackground(Color.WHITE);
 				//textField_Filename.requestFocusInWindow();
 
 			}
 			if(textField_Filename.getText().equalsIgnoreCase(""))
-				btnDone.setEnabled(false);
+				btnDone.setVisible(false);
 		}catch(Exception e)
 		{}
 

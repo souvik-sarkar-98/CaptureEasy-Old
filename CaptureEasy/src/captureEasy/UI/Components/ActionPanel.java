@@ -26,8 +26,8 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 	public JPanel ActionPanel;
 	public static JPanel panel_4;
 	public JRadioButton rdbtnSavePreviousWork;
-	JRadioButton rdbtnContinuePreviousWork;
-	JRadioButton rdbtnDeletePreviousWork;
+	public JRadioButton rdbtnContinuePreviousWork;
+	public JRadioButton rdbtnDeletePreviousWork;
 	int saveTabIndex=0;
 	SettingsPanel settingsPanel=null;
 	private JButton btnProceed;
@@ -150,9 +150,10 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 					TabbledPanel.addTab("Save", null,savePanel.SaveScrollPane, null);
 					TabbledPanel.setTitleAt(TabbledPanel.getTabCount()-1, ActionGUI.PRE_HTML + "Save" + ActionGUI.POST_HTML);
 					savePanel.textField_Filename.requestFocusInWindow();
-					savePanel.btnDone.setEnabled(false);
+					savePanel.btnDone.setVisible(false);
 					savePanel.exitbtn.setEnabled(false);
 					savePanel.rdbtnNewDoc.setEnabled(false);
+					savePanel.btnDone.setText("Okay");
 					saveTabIndex=TabbledPanel.getTabCount()-1;
 					TabbledPanel.setSelectedIndex(saveTabIndex);
 					if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
@@ -180,7 +181,6 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				}
 				else if(rdbtnContinuePreviousWork.isSelected())
 				{
-					Library.c=lastFileName(getProperty(TempFilePath,"TempPath"));
 					ActionGUI.dialog.dispose();
 					ActionGUI.leaveControl=true;
 					try{SensorGUI.frame.setAlwaysOnTop(true);}catch(Exception e){}
@@ -188,6 +188,7 @@ public class ActionPanel extends Library implements MouseListener,MouseMotionLis
 				}
 				else
 				{
+					comments.clear();
 					Library.c=0;
 					updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
 					ActionGUI.dialog.dispose();

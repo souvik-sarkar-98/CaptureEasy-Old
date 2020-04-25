@@ -191,21 +191,22 @@ public class SensorGUI extends Library{
 							frame.dispose();
 							SharedRepository.stopThread=true;
 							String comm="";int c=0;
-							File[] f=new File(getProperty(TempFilePath,"Comments")).listFiles();
+							File[] f=new File(getProperty(TempFilePath,"TempPath")).listFiles();
 							if(f.length>0)
 							{
 								for(int i=0;i<f.length;i++)
 								{
-									if(comments.get(f[i+1].getName())!=null)
+									if(comments.get(f[i].getName())!=null)
 									{
 										if(c!=0)
 											comm=comm+"_";
-										comm=comm+f[i+1].getName()+"->"+comments.get(f[i+1].getName());
+										comm=comm+f[i].getName()+"->"+comments.get(f[i].getName());
 										c++;
 									}
 								}
 								getProperty(DataFilePath,"Comments");
-								updateProperty(DataFilePath,"Comments","");
+								updateProperty(DataFilePath,"Comments",comm);
+								updateProperty(DataFilePath,"TempCode",new File(getProperty(TempFilePath,"TempPath")).getName());
 							}
 							
 							try {
@@ -257,6 +258,8 @@ public class SensorGUI extends Library{
 					{
 						tabs.add("Save");
 						tabs.add("View");
+						
+
 					}
 					tabs.add("Settings");
 					frame.setAlwaysOnTop(false);
@@ -316,6 +319,7 @@ public class SensorGUI extends Library{
 
 					ActionGUI.dialog.setVisible(true);
 					
+
 					}
 				}
 			}
@@ -368,13 +372,10 @@ public class SensorGUI extends Library{
 						tabs.add("Settings");
 						
 						new ActionGUI(tabs);
-						
 						ActionGUI.dialog.setVisible(true);
 						ActionGUI.savePanel.textField_Filename.requestFocusInWindow();
 						ActionGUI.savePanel.rdbtnNewDoc.setEnabled(false);
-						ActionGUI.savePanel.btnDone.setEnabled(false);
-						
-						
+						ActionGUI.savePanel.btnDone.setVisible(false);
 						
 					}
 				}
@@ -416,6 +417,7 @@ public class SensorGUI extends Library{
 							public void actionPerformed(ActionEvent arg0) {
 								Library.c=0;
 								updateProperty(TempFilePath,"TempPath",createFolder(System.getProperty("user.dir")+"/CaptureEasy/Temp/"+new Random().nextInt(1000000000)));
+								comments.clear();
 							}
 						});
 					}
@@ -542,6 +544,7 @@ public class SensorGUI extends Library{
 					new ActionGUI(tabs);
 					
 					ActionGUI.dialog.setVisible(true);
+					
 				}
 
 			}

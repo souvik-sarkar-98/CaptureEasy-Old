@@ -28,17 +28,17 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 	public JPanel ViewScrollPane;
 	JPanel panel_Image;
 	public static JLabel ImageLabel;
-	JLabel label_Prev;
-	JLabel label_VisitFolder;
-	JLabel Label_FullView;
-	JLabel label_Next;
-	JLabel label_Delete;
-	JPanel panel_Button;
+	public JLabel label_Prev;
+	public JLabel label_VisitFolder;
+	public JLabel Label_FullView;
+	public JLabel label_Next;
+	public JLabel label_Delete;
+	public JPanel panel_Button;
 	public static File[] files;
 	public static int imgId;
 	PopUp p = null;
 	public JLabel lblExit;
-	private JLabel label_SetComment;
+	public JLabel label_SetComment;
 	public ViewPanel(JTabbedPane TabbledPanel)
 	{
 		
@@ -195,12 +195,35 @@ public class ViewPanel extends Library implements MouseListener,MouseMotionListe
 									ViewPanel.files=new File(getProperty(TempFilePath,"TempPath")).listFiles();
 									sortFiles(ViewPanel.files);
 									try {
+										if(files.length>0)
+										{
 										ImageLabel.setIcon(new ImageIcon(ImageIO.read(files[imgId]).getScaledInstance(410,250, java.awt.Image.SCALE_SMOOTH)));
 										ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br><br>Click image to zoom</html>");
 										if(comments.get(files[imgId].getName())!=null)
 											ImageLabel.setToolTipText("<html>Filename : "+files[imgId].getName()+"<br>Comment:"+comments.get(files[imgId].getName())+"<br><br>Click image to zoom</html>");
 
-									} catch (IOException e) {}
+										}
+										else
+										{
+											ImageLabel.setIcon(null);
+											ImageLabel.setText("                                             You have nothing to view");
+											ImageLabel.setToolTipText("");
+											label_SetComment.setEnabled(false);
+											label_Next.setEnabled(false);
+											label_Prev.setEnabled(false);
+											label_Delete.setEnabled(false);
+											Label_FullView.setEnabled(false);
+											for(int i=0;i<TabbledPanel.getTabCount();i++)
+											{
+												if(TabbledPanel.getTitleAt(i).toLowerCase().contains("save"))
+												{
+													TabbledPanel.removeTabAt(i);
+													lblExit.setEnabled(true);
+													break;
+												}
+											}
+										}
+										} catch (IOException e) {}
 								}
 							});				
 						}

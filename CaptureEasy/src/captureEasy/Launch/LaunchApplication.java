@@ -1,6 +1,7 @@
 package captureEasy.Launch;
 import captureEasy.Resources.DetectKeypress;
 import captureEasy.Resources.Library;
+import captureEasy.Resources.SharedRepository;
 import captureEasy.Resources.Update;
 import captureEasy.UI.ActionGUI;
 import captureEasy.UI.PopUp;
@@ -41,23 +42,34 @@ public class LaunchApplication extends Library{
 			ActionGUI.tagDrop=false;
 			ActionGUI.settingsPanel.comboBox_CaptureKey.setSelectedIndex(0);
 			ActionGUI.settingsPanel.comboBox_ImageFormat.setSelectedIndex(0);
-			
+
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 		}
 		else if (new File(createFolder(PropertyFilePath)).exists() &&  !IsEmpty(createFolder(getProperty(TempFilePath,"TempPath"))))
 		{
+			Library.c=lastFileName(getProperty(TempFilePath,"TempPath"));
+			try{
+				if(getProperty(DataFilePath,"TempCode").equals(new File(getProperty(TempFilePath,"TempPath")).getName()))
+				{
+					String[] datas=getProperty(DataFilePath,"Comments").split("_");
+					for(int i=0;i<datas.length;i++)
+					{
+						if(datas[i]!=null && !datas[i].equals("") && datas[i].split("->").length==2)
+							SharedRepository.comments.put(datas[i].split("->")[0], datas[i].split("->")[1]);
+					}
+				}
+			}catch(Exception w){}
 			List<String> tabs=new ArrayList<String>();
 			tabs.add("Action");
 			tabs.add("View");
-			
+
 			ActionGUI act=new ActionGUI(tabs);			
 			ActionGUI.dialog.setVisible(true);
 			act.viewPanel.lblExit.setEnabled(false);
 			act.actionPanel.rdbtnSavePreviousWork.setEnabled(false);
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 			TempNeeded=false;
-			
-			
+
 		}
 
 
@@ -83,7 +95,7 @@ public class LaunchApplication extends Library{
 			sn.sensor_panel.setEnabled(true);
 			new Thread(new Update()).start();
 			AlwaysClearTemp();
-			
+
 		}
 	}
 }

@@ -452,7 +452,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 									else
 									{
 										try{
-										if("true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
+										if(!ActionGUI.savePanel.chckbxSelectExistingDocument.isSelected() &&"true".equalsIgnoreCase(getProperty(PropertyFilePath,"showFolderNameField")))
 										{
 											ActionGUI.savePanel.lblParFol.setVisible(true);
 											ActionGUI.savePanel.textField_ParFol.setVisible(true);
@@ -462,8 +462,17 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 										{
 											ActionGUI.savePanel.lblParFol.setVisible(false);
 											ActionGUI.savePanel.textField_ParFol.setVisible(false);
-											ActionGUI.savePanel.textField_Filename.setColumns(22);
+
+											if(ActionGUI.savePanel.rdbtnSavePDF.isSelected() && SavePanel.chckbxOverwriteSelectedFile.isSelected())
+												ActionGUI.savePanel.textField_Filename.setColumns(16);
+											else 
+												ActionGUI.savePanel.textField_Filename.setColumns(22);
+
+											
+										
 										}
+										if(ActionGUI.savePanel.rdbtnSavePDF.isSelected() && SavePanel.chckbxOverwriteSelectedFile.getText().equalsIgnoreCase("Rename selected file")&& !SavePanel.chckbxOverwriteSelectedFile.isSelected())
+											ActionGUI.savePanel.btnDone.setVisible(true);
 										if(ActionPanel.panel_4!=null)
 											ActionGUI.redirectingTabID=2;
 										else
@@ -475,7 +484,7 @@ public class SettingsPanel extends Library implements MouseListener,MouseMotionL
 										
 										if(ActionGUI.savePanel!=null && !ActionGUI.savePanel.textField_Filename.getText().replaceAll("\\s", "").equals(""))
 										{
-											ActionGUI.savePanel.btnDone.setEnabled(true);
+											ActionGUI.savePanel.btnDone.setVisible(true);
 											ActionGUI.savePanel.textField_ParFol.setBackground(Color.WHITE);
 										}
 										ActionGUI.redirectingTabID=0;
