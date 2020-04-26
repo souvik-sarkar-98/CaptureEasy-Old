@@ -38,8 +38,6 @@ import javax.swing.table.TableColumn;
 import captureEasy.Resources.Library;
 
 import captureEasy.UI.ActionGUI;
-import captureEasy.UI.PopUp;
-
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;

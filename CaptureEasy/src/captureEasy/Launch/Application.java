@@ -14,13 +14,13 @@ import java.util.Random;
 
 import org.jnativehook.GlobalScreen;
 
-public class LaunchApplication extends Library{
+public class Application extends Library{
 	static boolean TempNeeded=true;
 	public static void main(String args[]) throws Exception
 	{
-		Perform();
+		launch();
 	}
-	public static void Perform() 
+	public static void launch() 
 	{	
 		if(!(new File(createFolder(Log4jPropertyFilePath)).exists()) || getProperty(Log4jPropertyFilePath,"log4j.rootLogger")==null || getProperty(Log4jPropertyFilePath,"log4j.rootLogger").replaceAll("\\s", "")=="")
 		{
@@ -66,7 +66,7 @@ public class LaunchApplication extends Library{
 			ActionGUI act=new ActionGUI(tabs);			
 			ActionGUI.dialog.setVisible(true);
 			act.viewPanel.lblExit.setEnabled(false);
-			act.actionPanel.rdbtnSavePreviousWork.setEnabled(false);
+			ActionGUI.actionPanel.rdbtnSavePreviousWork.setEnabled(false);
 			do{try {Thread.sleep(100);} catch (InterruptedException e) {}}while(!ActionGUI.leaveControl);	
 			TempNeeded=false;
 

@@ -345,15 +345,18 @@ public class Library extends SharedRepository
 				if(comments.get(files[i].getName())!=null)
 					run.setText(comments.get(files[i].getName()));
 				//XWPFPicture picture=
-						run.addPicture(pic, XWPFDocument.PICTURE_TYPE_PNG, files[i].getName(), Units.toEMU(470), Units.toEMU(265));
+				run.addPicture(pic, XWPFDocument.PICTURE_TYPE_PNG, files[i].getName(), Units.toEMU(470), Units.toEMU(265));
 				//picture.getCTPicture().getSpPr().addNewLn().setW(Units.toEMU(1.5));			
 				//picture.getCTPicture().getSpPr().getLn().addNewPrstDash();
 				SharedRepository.progress=(int)Math.round(((Double.valueOf(i+1))/Double.valueOf(files.length))*100);
 				pic.close();
-				if(i%2==0)
-					run.addBreak();
-				else 
-					run.addBreak(BreakType.PAGE);
+				if(i!=files.length-1)
+				{
+					if(i%2==0)
+						run.addBreak();
+					else 
+						run.addBreak(BreakType.PAGE);
+				}
 			} catch (InvalidFormatException | IOException e) {
 				logError(e,e.getClass().getName()+" occured while pasteing '"+files[(int) i].getName()+"'. File Path: "+files[i].getPath());
 				new PopUp("ERROR","error",e.getClass().getName()+" occured while pasteing '"+files[i].getName()+"'. Visit 'Error.log for more details.","Ok, I understood","").setVisible(true);
@@ -376,11 +379,14 @@ public class Library extends SharedRepository
 					document.add(new Paragraph(comments.get(tempFiles[i].getName())));
 				document.add(image); 
 				SharedRepository.progress=(int)Math.round(((Double.valueOf(i+1))/Double.valueOf(tempFiles.length))*100);
+				if(i!=tempFiles.length-1)
+				{
 				if(i%2==0)
 					document.add(new Paragraph("\n"));
 				else 
 					document.add(new AreaBreak());
-				}catch(Exception e){
+				}
+			}catch(Exception e){
 				SavePanel.lblUpdatingFiles.setText(e.getClass().getSimpleName()+" Occured ");
 			}
 		}  
@@ -456,7 +462,7 @@ public class Library extends SharedRepository
 			SavePanel.lblUpdatingFiles.setText("Getting previous files ...");
 			int i=1;
 			try{
-				
+
 				@SuppressWarnings("resource")
 				XWPFDocument docx=new XWPFDocument(new FileInputStream(filePath));
 				List<XWPFPictureData> picture=docx.getAllPictures();
